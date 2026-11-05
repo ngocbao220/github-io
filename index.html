@@ -25,12 +25,13 @@ h3{font-size:17px;margin:20px 0 6px}
 p{margin:0 0 8px}
 button{font:inherit;color:inherit}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.sample{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.sample{display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 8px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:6px;cursor:pointer}
 .sample:hover{border-color:#b9bec5}
 .sample[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.sample b{display:block;font-size:16px}
-.sample .sub{font-size:14px;color:var(--muted)}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.sample b{font-size:16px}
+.sample .sub{grid-column:1;font-size:14px;color:var(--muted);line-height:1.35}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.sample .tags{grid-column:2;grid-row:1 / span 2}
 .tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:0 8px;color:var(--muted);background:#fff;line-height:20px}
 .player{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:10px;padding:14px}
 .pbtn{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:18px;cursor:pointer}
@@ -39,7 +40,7 @@ canvas{display:block;width:100%;height:72px;cursor:pointer}
 canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .time{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .title{margin:0 0 10px;font-size:15px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.tabs{display:flex;gap:4px;margin-top:22px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs{display:flex;flex-wrap:wrap;gap:0 4px;margin-top:22px;border-bottom:1px solid var(--line)}
 .tab{background:none;border:0;border-bottom:2px solid transparent;padding:8px 12px;cursor:pointer;color:var(--muted);white-space:nowrap;margin-bottom:-1px}
 .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
 .tab .n{font-size:12px;color:var(--muted);margin-left:6px;font-weight:400}
@@ -187,17 +188,43 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </div>
 
 <script>
-var PEAKS = {"1": [0.062, 0.056, 0.053, 0.708, 0.775, 0.721, 0.776, 0.721, 0.246, 0.909, 0.722, 0.532, 0.698, 0.638, 0.974, 0.569, 0.358, 0.472, 0.717, 0.7, 0.749, 0.707, 0.145, 0.378, 0.436, 0.257, 0.244, 0.232, 0.535, 0.343, 0.21, 0.314, 0.39, 0.327, 0.427, 0.374, 0.362, 0.265, 0.227, 0.114, 0.418, 0.363, 0.286, 0.326, 0.417, 0.486, 0.35, 0.316, 0.221, 0.23, 0.213, 0.126, 0.266, 0.686, 0.433, 0.244, 0.305, 0.621, 0.482, 0.332, 0.808, 0.706, 0.555, 0.504, 0.165, 1.0, 0.892, 0.42, 0.449, 0.96, 0.743, 0.773, 0.632, 0.682, 0.899, 0.471, 0.727, 0.447, 0.291, 0.413, 0.362, 0.461, 0.781, 0.552, 0.329, 0.283, 0.249, 0.123, 0.057, 0.071], "2": [0.026, 0.142, 0.998, 0.621, 0.37, 0.687, 1.0, 0.885, 0.656, 0.69, 0.201, 0.607, 0.582, 0.806, 0.323, 0.76, 0.74, 0.536, 0.486, 0.361, 0.354, 0.511, 0.515, 0.435, 0.785, 0.618, 0.282, 0.877, 0.685, 0.724, 0.405, 0.455, 0.431, 0.16, 0.545, 0.184, 0.082, 0.452, 0.344, 0.484, 0.531, 0.333, 0.278, 0.1, 0.498, 0.522, 0.209, 0.069, 0.036, 0.159, 0.499, 0.414, 0.257, 0.29, 0.19, 0.124, 0.151, 0.338, 0.396, 0.237, 0.386, 0.283, 0.112, 0.341, 0.319, 0.425, 0.292, 0.141, 0.352, 0.148, 0.069, 0.486, 0.455, 0.345, 0.445, 0.259, 0.23, 0.292, 0.154, 0.306, 0.212, 0.207, 0.183, 0.243, 0.126, 0.048, 0.035, 0.038, 0.025, 0.038], "3": [0.26, 0.132, 0.374, 0.424, 0.383, 0.425, 0.386, 0.271, 0.399, 0.464, 0.855, 0.729, 0.713, 0.669, 0.272, 0.555, 0.454, 0.474, 0.586, 0.457, 0.35, 0.548, 0.514, 0.537, 0.853, 1.0, 0.637, 0.363, 0.265, 0.771, 0.879, 0.886, 0.75, 0.565, 0.556, 0.494, 0.314, 0.222, 0.651, 0.698, 0.704, 0.435, 0.156, 0.098, 0.089, 0.568, 0.542, 0.402, 0.595, 0.39, 0.492, 0.215, 0.203, 0.26, 0.089, 0.525, 0.456, 0.175, 0.506, 0.493, 0.188, 0.685, 0.598, 0.508, 0.612, 0.382, 0.589, 0.532, 0.61, 0.694, 0.291, 0.101, 0.314, 0.363, 0.172, 0.414, 0.505, 0.359, 0.223, 0.168, 0.22, 0.303, 0.2, 0.214, 0.211, 0.186, 0.289, 0.126, 0.05, 0.029], "4": [0.02, 0.021, 0.087, 0.141, 0.177, 0.218, 0.2, 0.197, 0.121, 0.103, 0.102, 0.117, 0.117, 0.111, 0.108, 0.091, 0.118, 0.093, 0.046, 0.084, 0.543, 0.442, 0.378, 0.258, 0.321, 0.335, 0.32, 0.342, 0.479, 0.313, 0.336, 0.37, 0.42, 0.246, 0.31, 0.156, 0.151, 0.135, 0.146, 0.109, 0.185, 0.146, 0.084, 0.082, 0.059, 0.08, 0.114, 0.098, 0.098, 0.214, 0.33, 0.216, 0.218, 0.136, 0.19, 0.189, 0.164, 0.161, 0.137, 0.104, 0.052, 0.06, 0.466, 0.332, 0.959, 0.858, 0.67, 0.807, 0.793, 1.0, 0.865, 0.827, 0.725, 0.455, 0.205, 0.143, 0.463, 0.537, 0.281, 0.339, 0.36, 0.468, 0.38, 0.188, 0.152, 0.468, 0.515, 0.3, 0.191, 0.091], "5": [0.262, 0.408, 0.333, 0.263, 0.214, 0.245, 0.265, 0.273, 0.318, 0.479, 0.367, 0.297, 0.293, 0.207, 0.269, 0.22, 0.27, 0.216, 0.288, 0.175, 0.18, 0.311, 0.294, 0.369, 0.256, 0.337, 0.302, 0.214, 0.241, 0.227, 0.296, 0.382, 0.338, 0.387, 0.394, 0.937, 0.487, 0.337, 0.393, 0.571, 0.368, 0.446, 0.3, 0.565, 0.355, 0.318, 0.637, 0.434, 0.435, 0.437, 0.382, 0.376, 0.331, 0.397, 0.274, 0.341, 0.394, 0.318, 0.373, 0.337, 0.386, 0.421, 0.262, 0.392, 0.47, 0.433, 0.44, 0.366, 0.282, 0.337, 0.263, 0.503, 0.366, 0.385, 0.417, 1.0, 0.452, 0.362, 0.438, 0.316, 0.372, 0.379, 0.407, 0.352, 0.434, 0.334, 0.329, 0.259, 0.244, 0.317], "6": [0.56, 0.507, 0.304, 0.148, 0.47, 0.994, 0.688, 0.715, 0.605, 0.546, 0.359, 0.504, 0.466, 0.259, 0.644, 0.663, 0.697, 0.639, 0.171, 0.068, 0.075, 0.121, 0.434, 0.316, 0.296, 0.238, 0.143, 0.167, 0.717, 0.647, 0.496, 0.692, 0.887, 0.926, 0.703, 0.665, 0.629, 1.0, 0.888, 0.7, 0.631, 0.674, 0.651, 0.652, 0.419, 0.483, 0.597, 0.424, 0.068, 0.077, 0.059, 0.453, 0.839, 0.963, 0.576, 0.908, 0.66, 0.561, 0.65, 0.545, 0.427, 0.378, 0.511, 0.462, 0.424, 0.617, 0.486, 0.518, 0.579, 0.524, 0.665, 0.826, 0.822, 0.508, 0.492, 0.427, 0.551, 0.485, 0.407, 0.447, 0.263, 0.063, 0.318, 0.425, 0.218, 0.525, 0.518, 0.595, 0.576, 0.17]};
+var PEAKS = {"1": [0.062, 0.056, 0.053, 0.708, 0.775, 0.721, 0.776, 0.721, 0.246, 0.909, 0.722, 0.532, 0.698, 0.638, 0.974, 0.569, 0.358, 0.472, 0.717, 0.7, 0.749, 0.707, 0.145, 0.378, 0.436, 0.257, 0.244, 0.232, 0.535, 0.343, 0.21, 0.314, 0.39, 0.327, 0.427, 0.374, 0.362, 0.265, 0.227, 0.114, 0.418, 0.363, 0.286, 0.326, 0.417, 0.486, 0.35, 0.316, 0.221, 0.23, 0.213, 0.126, 0.266, 0.686, 0.433, 0.244, 0.305, 0.621, 0.482, 0.332, 0.808, 0.706, 0.555, 0.504, 0.165, 1.0, 0.892, 0.42, 0.449, 0.96, 0.743, 0.773, 0.632, 0.682, 0.899, 0.471, 0.727, 0.447, 0.291, 0.413, 0.362, 0.461, 0.781, 0.552, 0.329, 0.283, 0.249, 0.123, 0.057, 0.071], "2": [0.026, 0.142, 0.998, 0.621, 0.37, 0.687, 1.0, 0.885, 0.656, 0.69, 0.201, 0.607, 0.582, 0.806, 0.323, 0.76, 0.74, 0.536, 0.486, 0.361, 0.354, 0.511, 0.515, 0.435, 0.785, 0.618, 0.282, 0.877, 0.685, 0.724, 0.405, 0.455, 0.431, 0.16, 0.545, 0.184, 0.082, 0.452, 0.344, 0.484, 0.531, 0.333, 0.278, 0.1, 0.498, 0.522, 0.209, 0.069, 0.036, 0.159, 0.499, 0.414, 0.257, 0.29, 0.19, 0.124, 0.151, 0.338, 0.396, 0.237, 0.386, 0.283, 0.112, 0.341, 0.319, 0.425, 0.292, 0.141, 0.352, 0.148, 0.069, 0.486, 0.455, 0.345, 0.445, 0.259, 0.23, 0.292, 0.154, 0.306, 0.212, 0.207, 0.183, 0.243, 0.126, 0.048, 0.035, 0.038, 0.025, 0.038], "3": [0.26, 0.132, 0.374, 0.424, 0.383, 0.425, 0.386, 0.271, 0.399, 0.464, 0.855, 0.729, 0.713, 0.669, 0.272, 0.555, 0.454, 0.474, 0.586, 0.457, 0.35, 0.548, 0.514, 0.537, 0.853, 1.0, 0.637, 0.363, 0.265, 0.771, 0.879, 0.886, 0.75, 0.565, 0.556, 0.494, 0.314, 0.222, 0.651, 0.698, 0.704, 0.435, 0.156, 0.098, 0.089, 0.568, 0.542, 0.402, 0.595, 0.39, 0.492, 0.215, 0.203, 0.26, 0.089, 0.525, 0.456, 0.175, 0.506, 0.493, 0.188, 0.685, 0.598, 0.508, 0.612, 0.382, 0.589, 0.532, 0.61, 0.694, 0.291, 0.101, 0.314, 0.363, 0.172, 0.414, 0.505, 0.359, 0.223, 0.168, 0.22, 0.303, 0.2, 0.214, 0.211, 0.186, 0.289, 0.126, 0.05, 0.029], "4": [0.02, 0.021, 0.087, 0.141, 0.177, 0.218, 0.2, 0.197, 0.121, 0.103, 0.102, 0.117, 0.117, 0.111, 0.108, 0.091, 0.118, 0.093, 0.046, 0.084, 0.543, 0.442, 0.378, 0.258, 0.321, 0.335, 0.32, 0.342, 0.479, 0.313, 0.336, 0.37, 0.42, 0.246, 0.31, 0.156, 0.151, 0.135, 0.146, 0.109, 0.185, 0.146, 0.084, 0.082, 0.059, 0.08, 0.114, 0.098, 0.098, 0.214, 0.33, 0.216, 0.218, 0.136, 0.19, 0.189, 0.164, 0.161, 0.137, 0.104, 0.052, 0.06, 0.466, 0.332, 0.959, 0.858, 0.67, 0.807, 0.793, 1.0, 0.865, 0.827, 0.725, 0.455, 0.205, 0.143, 0.463, 0.537, 0.281, 0.339, 0.36, 0.468, 0.38, 0.188, 0.152, 0.468, 0.515, 0.3, 0.191, 0.091], "5": [0.262, 0.408, 0.333, 0.263, 0.214, 0.245, 0.265, 0.273, 0.318, 0.479, 0.367, 0.297, 0.293, 0.207, 0.269, 0.22, 0.27, 0.216, 0.288, 0.175, 0.18, 0.311, 0.294, 0.369, 0.256, 0.337, 0.302, 0.214, 0.241, 0.227, 0.296, 0.382, 0.338, 0.387, 0.394, 0.937, 0.487, 0.337, 0.393, 0.571, 0.368, 0.446, 0.3, 0.565, 0.355, 0.318, 0.637, 0.434, 0.435, 0.437, 0.382, 0.376, 0.331, 0.397, 0.274, 0.341, 0.394, 0.318, 0.373, 0.337, 0.386, 0.421, 0.262, 0.392, 0.47, 0.433, 0.44, 0.366, 0.282, 0.337, 0.263, 0.503, 0.366, 0.385, 0.417, 1.0, 0.452, 0.362, 0.438, 0.316, 0.372, 0.379, 0.407, 0.352, 0.434, 0.334, 0.329, 0.259, 0.244, 0.317], "6": [0.56, 0.507, 0.304, 0.148, 0.47, 0.994, 0.688, 0.715, 0.605, 0.546, 0.359, 0.504, 0.466, 0.259, 0.644, 0.663, 0.697, 0.639, 0.171, 0.068, 0.075, 0.121, 0.434, 0.316, 0.296, 0.238, 0.143, 0.167, 0.717, 0.647, 0.496, 0.692, 0.887, 0.926, 0.703, 0.665, 0.629, 1.0, 0.888, 0.7, 0.631, 0.674, 0.651, 0.652, 0.419, 0.483, 0.597, 0.424, 0.068, 0.077, 0.059, 0.453, 0.839, 0.963, 0.576, 0.908, 0.66, 0.561, 0.65, 0.545, 0.427, 0.378, 0.511, 0.462, 0.424, 0.617, 0.486, 0.518, 0.579, 0.524, 0.665, 0.826, 0.822, 0.508, 0.492, 0.427, 0.551, 0.485, 0.407, 0.447, 0.263, 0.063, 0.318, 0.425, 0.218, 0.525, 0.518, 0.595, 0.576, 0.17], "7": [0.072, 0.074, 0.832, 0.933, 0.893, 0.53, 1.0, 0.663, 0.582, 0.431, 0.434, 0.324, 0.278, 0.121, 0.112, 0.083, 0.399, 0.553, 0.451, 0.287, 0.488, 0.498, 0.807, 0.347, 0.514, 0.558, 0.646, 0.596, 0.62, 0.616, 0.397, 0.497, 0.308, 0.608, 0.581, 0.473, 0.678, 0.583, 0.212, 0.111, 0.571, 0.458, 0.327, 0.409, 0.611, 0.579, 0.523, 0.568, 0.623, 0.722, 0.478, 0.403, 0.675, 0.751, 0.957, 0.13, 0.085, 0.086, 0.089, 0.093, 0.097, 0.213, 0.475, 0.351, 0.412, 0.465, 0.605, 0.912, 0.931, 0.87, 0.953, 0.922, 0.653, 0.479, 0.759, 0.469, 0.583, 0.471, 0.469, 0.479, 0.323, 0.764, 0.743, 0.709, 0.662, 0.241, 0.37, 0.316, 0.105, 0.095], "8": [0.052, 0.065, 0.201, 0.106, 0.504, 0.658, 0.228, 0.087, 0.084, 0.838, 0.769, 0.958, 0.827, 0.779, 0.306, 0.73, 0.538, 0.6, 0.888, 0.534, 0.611, 0.83, 0.972, 0.678, 0.379, 0.268, 0.137, 0.094, 0.479, 0.334, 0.727, 0.493, 0.594, 0.581, 0.815, 0.747, 0.933, 0.914, 0.802, 0.415, 0.443, 0.534, 0.481, 0.412, 0.575, 0.642, 1.0, 0.559, 0.579, 0.717, 0.944, 0.885, 0.869, 0.746, 0.475, 0.54, 0.44, 0.672, 0.421, 0.662, 0.373, 0.596, 0.454, 0.433, 0.252, 0.091, 0.088, 0.076, 0.067, 0.327, 0.375, 0.676, 0.63, 0.543, 0.652, 0.431, 0.589, 0.683, 0.701, 0.771, 0.925, 0.657, 0.396, 0.36, 0.413, 0.29, 0.895, 0.17, 0.066, 0.055], "9": [0.058, 0.504, 0.678, 0.104, 0.14, 0.435, 0.29, 0.18, 0.152, 0.102, 0.053, 0.846, 0.79, 0.923, 0.642, 0.555, 0.644, 0.541, 0.748, 0.69, 0.625, 0.875, 0.515, 0.547, 0.504, 0.722, 0.475, 0.327, 0.763, 0.691, 0.602, 0.341, 0.076, 0.059, 0.257, 0.862, 0.659, 0.706, 0.724, 0.819, 0.549, 0.844, 0.733, 0.561, 0.473, 0.266, 0.499, 0.36, 0.354, 0.051, 0.043, 0.046, 0.556, 0.603, 0.339, 0.477, 0.498, 0.596, 0.469, 0.523, 0.622, 0.712, 0.575, 0.623, 0.56, 0.674, 0.679, 0.642, 0.424, 0.068, 0.071, 0.056, 0.533, 0.364, 0.275, 0.151, 0.223, 0.496, 0.143, 0.81, 0.728, 0.72, 1.0, 0.862, 0.697, 0.466, 0.564, 0.788, 0.524, 0.693], "10": [0.031, 0.057, 0.721, 0.612, 1.0, 0.901, 0.628, 0.55, 0.719, 0.433, 0.444, 0.44, 0.588, 0.496, 0.485, 0.653, 0.453, 0.37, 0.316, 0.183, 0.074, 0.309, 0.498, 0.583, 0.374, 0.635, 0.416, 0.465, 0.299, 0.379, 0.44, 0.544, 0.454, 0.306, 0.144, 0.385, 0.66, 0.324, 0.322, 0.385, 0.443, 0.362, 0.306, 0.388, 0.56, 0.48, 0.397, 0.392, 0.706, 0.57, 0.621, 0.434, 0.136, 0.447, 0.382, 0.51, 0.375, 0.096, 0.064, 0.08, 0.052, 0.05, 0.726, 0.624, 0.451, 0.453, 0.441, 0.371, 0.176, 0.228, 0.143, 0.67, 0.414, 0.477, 0.254, 0.496, 0.511, 0.711, 0.494, 0.514, 0.416, 0.874, 0.569, 0.737, 0.578, 0.512, 0.512, 0.363, 0.085, 0.048]};
 
 /* ---- Dữ liệu ---- */
 var SAMPLES = [
-  {n:1,label:"Nói xong",src:"audio/vi_du_1.mp3",tags:["turntaking"]},
-  {n:2,label:"Ngừng giữa chừng",src:"audio/vi_du_2.mp3",tags:["turntaking"]},
-  {n:3,label:"Tiếng đệm",src:"audio/vi_du_3.mp3",tags:["turntaking"]},
-  {n:4,label:"Chen ngang",src:"audio/vi_du_4.mp3",tags:["turntaking"]},
-  {n:5,label:"Không rõ",src:"audio/vi_du_5.mp3",tags:["turntaking"]},
-  {n:6,label:"Chấm điểm mô tả",src:"audio/vi_du_6.mp3",tags:["slm"]}
+  {id:1,label:"Nói xong",tags:["turntaking"]},
+  {id:7,label:"Chấm điểm mô tả",tags:["slm"],content:[
+    "Một người chia sẻ quyết định mình tự hào nhất là học văn bằng hai ở ngôi trường từng mơ ước, hiện đang học và sắp tốt nghiệp.",
+    "Một người nói về việc mình đang đi học và sắp tốt nghiệp.",
+    "Một người nói rằng đã bỏ học văn bằng hai để đi làm.",
+    "Hai người đang bàn về món ăn cuối tuần."]},
+  {id:2,label:"Ngừng giữa chừng",tags:["turntaking"]},
+  {id:8,label:"Chấm điểm mô tả",tags:["slm"],content:[
+    "Một người cho biết trong việc học, họ dùng rất nhiều nền tảng mạng xã hội khác nhau để học hỏi và tiếp thu thêm kiến thức.",
+    "Một người nói rằng họ dùng mạng xã hội để học.",
+    "Một người nói rằng họ rất ít dùng mạng xã hội khi học.",
+    "Một người đang giới thiệu một món ăn."]},
+  {id:3,label:"Tiếng đệm",tags:["turntaking"]},
+  {id:9,label:"Chấm điểm mô tả",tags:["slm"],content:[
+    "Một người kể chuyến đi ấn tượng nhất là đi Ba Vì cùng gia đình, cả nhà cắm trại vui vẻ cùng anh chị và các cháu.",
+    "Một người kể về một chuyến đi chơi cùng gia đình.",
+    "Một người kể về chuyến đi công tác ở Đà Nẵng cùng đồng nghiệp.",
+    "Một người đang đọc bản tin thời tiết."]},
+  {id:4,label:"Chen ngang",tags:["turntaking"]},
+  {id:10,label:"Chấm điểm mô tả",tags:["slm"],content:[
+    "Một người nói rằng họ luôn chọn lọc thông tin khi đọc mạng xã hội và học hỏi được rất nhiều điều từ các nền tảng đó.",
+    "Một người nói về việc dùng mạng xã hội.",
+    "Một người nói rằng họ tin hết mọi thông tin trên mạng xã hội.",
+    "Một người đang kể chuyện cổ tích."]},
+  {id:5,label:"Không rõ",tags:["turntaking"]},
+  {id:6,label:"Chấm điểm mô tả",tags:["slm"],content:[
+    "Một người kể rằng giai đoạn đầu rất vất vả, liên quan đến tinh thần, sức khỏe và tài chính, nhưng nhờ ý chí và nỗ lực nên đã vượt qua.",
+    "Một người nói rằng thời gian đầu rất vất vả và đã cố gắng để vượt qua.",
+    "Một người nói về chuyện chi phí đi học và đã quyết định bỏ giữa chừng.",
+    "Hai người đang bàn về kế hoạch đi du lịch cuối tuần."]}
 ];
+SAMPLES.forEach(function(s){s.src="audio/vi_du_"+s.id+".mp3";});
+function rot(a,k){k=k%a.length;return a.slice(k).concat(a.slice(0,k));}
 
 var SCALE_CONTENT=[
   ["5","Đúng 100% nội dung, nêu được mục đích và ngữ cảnh"],
@@ -247,24 +274,19 @@ var PANELS = {
         ["Bỏ qua: giọng không tự nhiên","Méo tiếng, biến đổi giọng"]]},
       {id:"s3",title:"3. Bạn chắc chắn đến đâu?",opts:[["Chắc chắn"],["Hơi phân vân"],["Không chắc"]]}
     ]},
-    {id:"content",name:"Nội dung",intro:"Chấm điểm mức độ phù hợp của từng đoạn mô tả về nội dung lời nói.",
-     qs:scoreQs("c",SCALE_CONTENT,[
-      "Một người kể rằng giai đoạn đầu rất vất vả, liên quan đến tinh thần, sức khỏe và tài chính, nhưng nhờ ý chí và nỗ lực nên đã vượt qua.",
-      "Một người nói rằng thời gian đầu rất vất vả và đã cố gắng để vượt qua.",
-      "Một người nói về chuyện chi phí đi học và đã quyết định bỏ giữa chừng.",
-      "Hai người đang bàn về kế hoạch đi du lịch cuối tuần."])},
+    {id:"content",name:"Nội dung",intro:"Chấm điểm mức độ phù hợp của từng đoạn mô tả về nội dung lời nói.",qs:[]},
     {id:"voice",name:"Sắc thái giọng",intro:"Chấm điểm mô tả về người nói: giới tính, độ tuổi, số người, cảm xúc, cách nói.",
-     qs:scoreQs("v",SCALE_VOICE,[
+     qs:[],voiceDescs:[
       "Một giọng nói, người nói trẻ tuổi, tốc độ vừa phải, giọng đều và hơi nhấn khi nói về khó khăn, mang sắc thái tâm sự, cố gắng.",
       "Một người đang nói chuyện bình thường.",
       "Hai người đang tranh cãi với giọng gắt và to tiếng.",
-      "Tiếng một người đang cười lớn và hát."])},
+      "Tiếng một người đang cười lớn và hát."]},
     {id:"env",name:"Âm thanh môi trường",intro:"Chấm điểm mô tả về tiếng nền và không gian. Nếu file không có tiếng nền, chọn mục cuối.",
-     qs:scoreQs("e",SCALE_ENV,[
+     qs:[],envDescs:[
       "Không gian trong nhà yên tĩnh, chỉ nghe tiếng người nói, có tạp âm rất nhẹ của thiết bị thu.",
       "Trong nhà, hơi vang, có tạp âm nhẹ.",
       "Nơi rất ồn ào với tiếng xe cộ và tiếng nhạc.",
-      "Ngoài trời lúc mưa to, có tiếng sấm."])}
+      "Ngoài trời lúc mưa to, có tiếng sấm."]}
   ]
 };
 var SECTION_FOR={turn:"turn",style:"style",content:"content",voice:"voice",env:"env"};
@@ -296,9 +318,15 @@ function showPanel(id){
     var f=s.dataset.for;s.classList.toggle("hide",!(f==="all"||f===id));
   });
 }
-function buildPanels(tags){
+function buildPanels(s){
+  var tags=s.tags,k=SAMPLES.indexOf(s);
   activePanels=[];tabsEl.innerHTML="";panelsEl.innerHTML="";
-  tags.forEach(function(t){(PANELS[t]||[]).forEach(function(p){activePanels.push(p);});});
+  tags.forEach(function(t){(PANELS[t]||[]).forEach(function(p){
+    var c=Object.assign({},p);
+    if(p.id==="content")c.qs=scoreQs("c",SCALE_CONTENT,rot(s.content,s.id));
+    if(p.id==="voice")c.qs=scoreQs("v",SCALE_VOICE,rot(p.voiceDescs,s.id+1));
+    if(p.id==="env")c.qs=scoreQs("e",SCALE_ENV,rot(p.envDescs,s.id+2));
+    activePanels.push(c);});});
   activePanels.forEach(function(p){
     var b=document.createElement("button");b.type="button";b.className="tab";b.id="tb-"+p.id;b.setAttribute("role","tab");
     b.innerHTML=esc(p.name)+'<span class="n" id="cnt-'+p.id+'"></span>';
@@ -319,7 +347,7 @@ function fmt(s){s=Math.max(0,s||0);return Math.floor(s/60)+":"+("0"+Math.floor(s
 function draw(){
   var dpr=window.devicePixelRatio||1,w=canvas.clientWidth,h=canvas.clientHeight;
   canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-  var p=PEAKS[cur.n],n=p.length,bw=w/n,prog=audio&&audio.duration?audio.currentTime/audio.duration:0;
+  var p=PEAKS[cur.id],n=p.length,bw=w/n,prog=audio&&audio.duration?audio.currentTime/audio.duration:0;
   for(var i=0;i<n;i++){
     var bh=Math.max(3,p[i]*(h-6));
     ctx.fillStyle=(i/n<prog)?css("--accent"):css("--wave");
@@ -335,10 +363,10 @@ function load(s){
   audio.addEventListener("timeupdate",function(){updTime();draw();});
   audio.addEventListener("ended",function(){setPlayIcon(false);draw();});
   setPlayIcon(false);
-  ptitle.innerHTML="Đang nghe: mẫu "+s.n+" "+s.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("");
-  document.querySelectorAll(".sample").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.n==s.n?"true":"false");});
+  ptitle.innerHTML="Đang nghe: mẫu "+(SAMPLES.indexOf(s)+1)+" "+s.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("");
+  document.querySelectorAll(".sample").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.n==s.id?"true":"false");});
   timeEl.textContent="0:00 / 0:00";
-  buildPanels(s.tags);draw();
+  buildPanels(s);draw();
 }
 function toggle(){
   try{
@@ -356,10 +384,10 @@ canvas.addEventListener("keydown",function(e){
 window.addEventListener("resize",function(){if(cur)draw();});
 
 var box=document.getElementById("samples");
-SAMPLES.forEach(function(s){
-  var b=document.createElement("button");b.type="button";b.className="sample";b.dataset.n=s.n;b.setAttribute("aria-pressed","false");
-  b.innerHTML="<b>Mẫu "+s.n+"</b><span class=\"sub\">"+esc(s.label)+"</span><div class=\"tags\">"+s.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("")+"</div>";
-  b.addEventListener("click",function(){load(s);});
+SAMPLES.forEach(function(s,ix){
+  var b=document.createElement("button");b.type="button";b.className="sample";b.dataset.n=s.id;b.setAttribute("aria-pressed","false");
+  b.innerHTML="<b>Mẫu "+(ix+1)+"</b><span class=\"sub\">"+esc(s.label)+"</span><div class=\"tags\">"+s.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("")+"</div>";
+  b.addEventListener("click",function(){load(s);if(window.innerWidth<=860){try{document.getElementById("ptitle").scrollIntoView({block:"start"});}catch(e){}}});
   box.appendChild(b);
 });
 load(SAMPLES[0]);
