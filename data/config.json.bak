@@ -1,0 +1,412 @@
+{
+ "panels": {
+  "turntaking": [
+   {
+    "id": "tstyle",
+    "name": "Phong cách",
+    "intro": "Nhận xét về cách hai người trò chuyện trong cả đoạn.",
+    "qs": [
+     {
+      "id": "s1",
+      "title": "Nội dung của lời nói thuộc kiểu nào?",
+      "opts": [
+       [
+        "Kể chuyện"
+       ],
+       [
+        "Phỏng vấn"
+       ],
+       [
+        "Chia sẻ"
+       ],
+       [
+        "Trò chuyện thường"
+       ]
+      ]
+     },
+     {
+      "id": "s2",
+      "title": "Nhịp độ của lời nói thế nào?",
+      "opts": [
+       [
+        "Chậm rãi"
+       ],
+       [
+        "Bình thường"
+       ],
+       [
+        "Dồn dập"
+       ]
+      ]
+     },
+     {
+      "id": "s3",
+      "title": "Người nói có hay ngập ngừng (ờ, ừm, mà…) không?",
+      "opts": [
+       [
+        "Không"
+       ],
+       [
+        "Thỉnh thoảng"
+       ],
+       [
+        "Rất nhiều"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "id": "tcontent",
+    "name": "Nội dung",
+    "intro": "Nghe kỹ vài giây cuối. Lời nói ở đó đang đi đến đâu?",
+    "qs": [
+     {
+      "id": "c1",
+      "title": "Tầm 2 giây cuối, điều gì đã xảy ra?",
+      "opts": [
+       [
+        "Nói xong"
+       ],
+       [
+        "Ngừng giữa chừng"
+       ],
+       [
+        "Tiếng đệm"
+       ],
+       [
+        "Chen ngang"
+       ],
+       [
+        "Không rõ"
+       ]
+      ]
+     },
+     {
+      "id": "c2",
+      "title": "Câu cuối cùng có trọn nghĩa không?",
+      "opts": [
+       [
+        "Trọn nghĩa"
+       ],
+       [
+        "Bỏ lửng"
+       ],
+       [
+        "Không rõ"
+       ]
+      ]
+     },
+     {
+      "id": "c3",
+      "title": "Người kia có nên trả lời ngay lúc này không?",
+      "opts": [
+       [
+        "Có"
+       ],
+       [
+        "Chưa nên"
+       ],
+       [
+        "Không rõ"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "id": "tvoice",
+    "name": "Sắc thái giọng",
+    "intro": "Chọn theo giọng của người nói ở cuối đoạn.",
+    "qs": [
+     {
+      "id": "v1",
+      "title": "Giọng ở cuối câu thế nào?",
+      "opts": [
+       [
+        "Hạ xuống"
+       ],
+       [
+        "Giữ nguyên, lơ lửng"
+       ],
+       [
+        "Lên cao như câu hỏi"
+       ]
+      ]
+     },
+     {
+      "id": "v2",
+      "title": "Cảm xúc của câu nói là gì?",
+      "opts": [
+       [
+        "Vui"
+       ],
+       [
+        "Buồn"
+       ],
+       [
+        "Bình thường"
+       ],
+       [
+        "Tức giận"
+       ]
+      ]
+     },
+     {
+      "id": "v3",
+      "title": "Âm lượng giọng nói thế nào?",
+      "opts": [
+       [
+        "Nhỏ"
+       ],
+       [
+        "Vừa"
+       ],
+       [
+        "To"
+       ]
+      ]
+     },
+     {
+      "id": "v4",
+      "title": "Tốc độ nói thế nào?",
+      "opts": [
+       [
+        "Chậm"
+       ],
+       [
+        "Vừa"
+       ],
+       [
+        "Nhanh"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "id": "tenv",
+    "name": "Âm thanh môi trường",
+    "intro": "Chú ý những gì xảy ra ngoài lời của người nói chính.",
+    "qs": [
+     {
+      "id": "e1",
+      "title": "Ở cuối đoạn, có mấy người đang nói?",
+      "opts": [
+       [
+        "Một người"
+       ],
+       [
+        "Hai người nói cùng lúc"
+       ],
+       [
+        "Không ai nói"
+       ]
+      ]
+     },
+     {
+      "id": "e2",
+      "title": "Có ai chêm tiếng đệm (ừ, dạ, vâng…) không?",
+      "opts": [
+       [
+        "Có"
+       ],
+       [
+        "Không"
+       ],
+       [
+        "Không rõ"
+       ]
+      ]
+     },
+     {
+      "id": "e4",
+      "title": "Tiếng nền hoặc chất lượng âm thanh có làm khó nghe không?",
+      "opts": [
+       [
+        "Nghe rõ"
+       ],
+       [
+        "Hơi khó nghe"
+       ],
+       [
+        "Không nghe ra"
+       ]
+      ]
+     }
+    ]
+   }
+  ],
+  "slm": [
+   {
+    "id": "style",
+    "name": "Phong cách",
+    "intro": "Chọn phong cách giao tiếp của người nói.",
+    "qs": [
+     {
+      "id": "s1",
+      "title": "Phong cách giao tiếp",
+      "opts": [
+       [
+        "Marketing – Quảng cáo",
+        "Khỏe, tươi sáng, nhịp nhanh, nhấn dứt khoát"
+       ],
+       [
+        "Kể chuyện – Nội dung sáng tạo",
+        "Trầm ấm, giàu cảm xúc, ngữ điệu linh hoạt"
+       ],
+       [
+        "Hội thoại – Đời thường",
+        "Tự nhiên, thả lỏng, gần gũi"
+       ],
+       [
+        "Chính thống – Trang trọng – Phát biểu",
+        "Trầm ổn, uy lực, rõ chữ"
+       ]
+      ]
+     },
+     {
+      "id": "s2",
+      "title": "Có nên bỏ qua file này không?",
+      "opts": [
+       [
+        "Không, file dùng được"
+       ],
+       [
+        "Bỏ qua: chất lượng âm thanh kém",
+        "Nhiễu nặng, rè hoặc mất tiếng"
+       ],
+       [
+        "Bỏ qua: giọng không tự nhiên",
+        "Méo tiếng, biến đổi giọng"
+       ]
+      ]
+     },
+     {
+      "id": "s3",
+      "title": "Bạn chắc chắn đến đâu?",
+      "opts": [
+       [
+        "Chắc chắn"
+       ],
+       [
+        "Hơi phân vân"
+       ],
+       [
+        "Không chắc"
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "id": "content",
+    "name": "Nội dung",
+    "intro": "Chấm điểm mức độ phù hợp của từng đoạn mô tả về nội dung lời nói.",
+    "type": "score",
+    "prefix": "c",
+    "rot": 0,
+    "scale": [
+     [
+      "5",
+      "Đúng 100% nội dung, nêu được mục đích và ngữ cảnh"
+     ],
+     [
+      "4",
+      "Đúng nội dung chính, thiếu chi tiết phụ"
+     ],
+     [
+      "3",
+      "Đúng chủ đề chung, sai chi tiết quan trọng"
+     ],
+     [
+      "2",
+      "Rời rạc hoặc sai, dẫn đến hiểu sai ý"
+     ],
+     [
+      "1",
+      "Hoàn toàn không khớp"
+     ]
+    ],
+    "descs": null
+   },
+   {
+    "id": "voice",
+    "name": "Sắc thái giọng",
+    "intro": "Chấm điểm mô tả về người nói: giới tính, độ tuổi, số người, cảm xúc, cách nói.",
+    "type": "score",
+    "prefix": "v",
+    "rot": 1,
+    "scale": [
+     [
+      "5",
+      "Đúng tất cả: số người, giới tính, độ tuổi, cảm xúc, trạng thái"
+     ],
+     [
+      "4",
+      "Đúng đối tượng và cảm xúc chính, đặc tính giọng còn chung chung"
+     ],
+     [
+      "3",
+      "Đúng đặc tính nhưng sai cảm xúc, hoặc ngược lại"
+     ],
+     [
+      "2",
+      "Sai lệch đáng kể (nhầm giới tính, thiếu người nói)"
+     ],
+     [
+      "1",
+      "Sai mọi đặc tính về người và giọng nói"
+     ]
+    ],
+    "descs": [
+     "Một giọng nói, người nói trẻ tuổi, tốc độ vừa phải, giọng đều và hơi nhấn khi nói về khó khăn, mang sắc thái tâm sự, cố gắng.",
+     "Một người đang nói chuyện bình thường.",
+     "Hai người đang tranh cãi với giọng gắt và to tiếng.",
+     "Tiếng một người đang cười lớn và hát."
+    ]
+   },
+   {
+    "id": "env",
+    "name": "Âm thanh môi trường",
+    "intro": "Chấm điểm mô tả về tiếng nền và không gian. Nếu file không có tiếng nền, chọn mục cuối.",
+    "type": "score",
+    "prefix": "e",
+    "rot": 2,
+    "scale": [
+     [
+      "5",
+      "Đủ các lớp âm nền và đúng địa điểm"
+     ],
+     [
+      "4",
+      "Đúng không gian chính, bỏ sót tiếng nhỏ"
+     ],
+     [
+      "3",
+      "Chung chung, không gọi tên nguồn âm"
+     ],
+     [
+      "2",
+      "Sai bối cảnh"
+     ],
+     [
+      "1",
+      "Bỏ qua hoặc sai hoàn toàn"
+     ],
+     [
+      "0",
+      "Không có âm thanh môi trường",
+      "File và mô tả đều không nhắc đến"
+     ]
+    ],
+    "descs": [
+     "Không gian trong nhà yên tĩnh, chỉ nghe tiếng người nói, có tạp âm rất nhẹ của thiết bị thu.",
+     "Trong nhà, hơi vang, có tạp âm nhẹ.",
+     "Nơi rất ồn ào với tiếng xe cộ và tiếng nhạc.",
+     "Ngoài trời lúc mưa to, có tiếng sấm."
+    ]
+   }
+  ]
+ }
+}
