@@ -94,6 +94,34 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .exrow:first-child{border-top:0}
 .exrow .dplay{margin-left:0}
 .hide{display:none!important}
+.hr{display:flex;align-items:center;gap:10px}
+.ed{font:inherit;font-size:15px;font-weight:500;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer}
+.ed:hover{background:#f5f6f8}
+#edit{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.28);display:flex;justify-content:flex-end}
+#edit .sheet{width:min(640px,100%);height:100%;background:#fff;display:flex;flex-direction:column;box-shadow:-4px 0 18px rgba(0,0,0,.12)}
+#edit .eh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line)}
+#edit .eh b{font-size:17px;margin-right:auto}
+#edit .eb{flex:1;overflow-y:auto;padding:12px 16px 40px;scrollbar-width:thin;scrollbar-color:#cfd3d8 transparent}
+#edit .eb::-webkit-scrollbar{width:6px}#edit .eb::-webkit-scrollbar-thumb{background:#cfd3d8;border-radius:3px}
+#edit button{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 11px;cursor:pointer;color:var(--ink)}
+#edit button:hover{background:#f5f6f8}
+#edit button.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+#edit button.pri:hover{background:#1765cc}
+#edit button.dng{color:#b3261e}
+#edit input,#edit textarea{font:inherit;font-size:15px;width:100%;border:1px solid var(--line);border-radius:6px;padding:6px 8px;color:var(--ink);background:#fff}
+#edit textarea{resize:vertical;line-height:1.45}
+#edit input:focus,#edit textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+#edit .tagsel{display:flex;gap:6px;margin-bottom:10px}
+#edit .tagsel button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+#edit details{border:1px solid var(--line);border-radius:8px;margin-bottom:10px}
+#edit summary{padding:9px 12px;cursor:pointer;font-weight:600}
+#edit .pb{padding:4px 12px 12px}
+#edit label.f{display:block;font-size:13px;color:var(--muted);margin:8px 0 3px}
+#edit .eq{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:10px;background:#fafbfc}
+#edit .eq .top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+#edit .msg{font-size:14px;padding:0 16px 8px;min-height:20px}
+#edit .msg.err{color:#b3261e}#edit .msg.ok{color:#188038}
+#edit .tok{width:130px}
 .flt{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
 .flt button{font:inherit;font-size:14px;color:#444;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 11px;cursor:pointer}
 .flt button:hover{background:#f5f6f8}
@@ -108,7 +136,7 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
-<header><span>Gán nhãn hội thoại và giọng nói</span><button class="tg" id="tg" type="button" aria-pressed="true" title="Bật/tắt tài liệu hướng dẫn"><span class="sw"></span>Tài liệu</button></header>
+<header><span>Gán nhãn hội thoại và giọng nói</span><span class="hr"><button class="ed hide" id="edbtn" type="button">✎ Chỉnh sửa câu hỏi</button><button class="tg" id="tg" type="button" aria-pressed="true" title="Bật/tắt tài liệu hướng dẫn"><span class="sw"></span>Tài liệu</button></span></header>
 <div class="app">
   <aside class="col left" aria-label="Mẫu để nghe">
     <h2>Mẫu để nghe</h2>
@@ -373,6 +401,17 @@ var PANELS = {
   ]
 };
 
+/* ---- Cấu hình câu hỏi (mặc định + bản lưu trên server) ---- */
+PANELS.slm.forEach(function(p){
+  if(p.id==="content"){p.type="score";p.prefix="c";p.rot=0;p.scale=SCALE_CONTENT;p.descs=null;}
+  if(p.id==="voice"){p.type="score";p.prefix="v";p.rot=1;p.scale=SCALE_VOICE;p.descs=p.voiceDescs;delete p.voiceDescs;delete p.qs;}
+  if(p.id==="env"){p.type="score";p.prefix="e";p.rot=2;p.scale=SCALE_ENV;p.descs=p.envDescs;delete p.envDescs;delete p.qs;}
+  if(p.id==="content")delete p.qs;
+});
+var DEFAULT_CONFIG={panels:PANELS};
+var CONFIG=JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+var API={on:false,needsToken:false};
+
 /* ---- Dựng giao diện câu hỏi ---- */
 var tabsEl=document.getElementById("tabs"), panelsEl=document.getElementById("panels");
 var activePanels=[], activeId=null, uid=0;
@@ -408,11 +447,9 @@ function showPanel(id){
 function buildPanels(s){
   var tags=s.tags,k=SAMPLES.indexOf(s);
   activePanels=[];tabsEl.innerHTML="";panelsEl.innerHTML="";
-  tags.forEach(function(t){(PANELS[t]||[]).forEach(function(p){
+  tags.forEach(function(t){(CONFIG.panels[t]||[]).forEach(function(p){
     var c=Object.assign({},p);
-    if(p.id==="content")c.qs=scoreQs("c",SCALE_CONTENT,rot(s.content,s.id));
-    if(p.id==="voice")c.qs=scoreQs("v",SCALE_VOICE,rot(p.voiceDescs,s.id+1));
-    if(p.id==="env")c.qs=scoreQs("e",SCALE_ENV,rot(p.envDescs,s.id+2));
+    if(p.type==="score"){var d=(p.descs&&p.descs.length)?p.descs:s.content;c.qs=scoreQs(p.prefix||p.id,p.scale,rot(d,s.id+(p.rot||0)));}
     activePanels.push(c);});});
   activePanels.forEach(function(p){
     var b=document.createElement("button");b.type="button";b.className="tab";b.id="tb-"+p.id;b.setAttribute("role","tab");
@@ -542,6 +579,108 @@ load(SAMPLES[0]);
     if(e.key==="ArrowLeft"){set(w+30);e.preventDefault();}
     if(e.key==="ArrowRight"){set(w-30);e.preventDefault();}
   });
+})();
+
+/* ---- Chỉnh sửa câu hỏi (cần backend) ---- */
+function rerender(){
+  if(!cur)return;
+  var keep={};
+  panelsEl.querySelectorAll("input:checked").forEach(function(i){
+    var g=panelsEl.querySelectorAll('input[name="'+i.name+'"]');
+    keep[i.name]=Array.prototype.indexOf.call(g,i);
+  });
+  var was=activeId;
+  buildPanels(cur);
+  Object.keys(keep).forEach(function(n){var g=panelsEl.querySelectorAll('input[name="'+n+'"]');if(g[keep[n]])g[keep[n]].checked=true;});
+  if(was&&document.getElementById("pn-"+was))showPanel(was);
+  updCounts();
+}
+(function(){
+  var btn=document.getElementById("edbtn"),draft=null,dtag=null,pane=null;
+  function hdr(){var h={"Content-Type":"application/json"},k="";try{k=sessionStorage.getItem("tok")||"";}catch(e){}if(k)h["X-Token"]=k;return h;}
+  fetch("api/config",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    API.on=!!j.editable;API.needsToken=!!j.needs_token;
+    if(j.config&&j.config.panels){CONFIG=j.config;rerender();}
+    if(API.on)btn.classList.remove("hide");
+  }).catch(function(){});
+
+  function lines(a,mk){return a.map(mk).join("\n");}
+  function parse(txt,min){return txt.split("\n").map(function(l){return l.split("|").map(function(x){return x.trim();});}).filter(function(a){return a[0];}).map(function(a){while(a.length>min&&!a[a.length-1])a.pop();return a;});}
+  function el(h){var d=document.createElement("div");d.innerHTML=h;return d.firstChild;}
+  function A(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");}
+
+  function sync(){ /* đọc form vào draft */
+    if(!pane)return;
+    pane.querySelectorAll("[data-p]").forEach(function(box){
+      var p=draft.panels[box.dataset.t][+box.dataset.p];
+      p.name=box.querySelector(".pname").value;p.intro=box.querySelector(".pintro").value;
+      if(p.type==="score"){
+        p.scale=parse(box.querySelector(".pscale").value,2);
+        var d=box.querySelector(".pdescs");if(d){var v=d.value.split("\n").map(function(x){return x.trim();}).filter(Boolean);p.descs=v;}
+      }else{
+        p.qs=[].map.call(box.querySelectorAll(".eq"),function(qb){
+          return {id:qb.dataset.id,title:qb.querySelector(".qt").value,opts:parse(qb.querySelector(".qo").value,1)};
+        }).filter(function(q){return q.title.trim()&&q.opts.length;});
+      }
+    });
+  }
+  function render(){
+    var tags=Object.keys(draft.panels);if(!dtag||!draft.panels[dtag])dtag=tags[0];
+    var h='<div class="tagsel">'+tags.map(function(t){return '<button type="button" data-tag="'+A(t)+'" aria-pressed="'+(t===dtag)+'">'+A(t)+'</button>';}).join("")+'</div>';
+    h+='<p style="font-size:14px;color:var(--muted);margin:0 0 10px">Mỗi đáp án một dòng. Muốn thêm dòng phụ đề nhỏ, viết <b>đáp án | phụ đề</b>.</p>';
+    draft.panels[dtag].forEach(function(p,i){
+      h+='<details data-t="'+A(dtag)+'" data-p="'+i+'"'+(i===0?" open":"")+'><summary>'+A(p.name||"(chưa đặt tên)")+'</summary><div class="pb">';
+      h+='<label class="f">Tên phương diện</label><input class="pname" value="'+A(p.name)+'">';
+      h+='<label class="f">Lời dẫn đầu phần</label><textarea class="pintro" rows="2">'+A(p.intro)+'</textarea>';
+      if(p.type==="score"){
+        h+='<label class="f">Thang điểm (mỗi dòng: điểm | mô tả | ghi chú)</label><textarea class="pscale" rows="7">'+A(lines(p.scale,function(o){return o.join(" | ");}))+'</textarea>';
+        if(p.descs)h+='<label class="f">Các đoạn mô tả cần chấm (mỗi dòng một đoạn)</label><textarea class="pdescs" rows="6">'+A(p.descs.join("\n"))+'</textarea>';
+        else h+='<p style="font-size:13px;color:var(--muted)">Các đoạn mô tả lấy theo từng mẫu audio.</p>';
+      }else{
+        (p.qs||[]).forEach(function(q,k){
+          h+='<div class="eq" data-id="'+A(q.id)+'"><div class="top"><span>Câu '+(k+1)+'</span><button type="button" class="dng" data-del="'+i+'.'+k+'">Xoá câu</button></div>';
+          h+='<label class="f">Câu hỏi</label><input class="qt" value="'+A(q.title)+'">';
+          h+='<label class="f">Đáp án</label><textarea class="qo" rows="'+Math.max(3,q.opts.length+1)+'">'+A(lines(q.opts,function(o){return o.join(" | ");}))+'</textarea></div>';
+        });
+        h+='<div style="margin-top:10px"><button type="button" data-add="'+i+'">+ Thêm câu hỏi</button></div>';
+      }
+      h+='</div></details>';
+    });
+    pane.innerHTML=h;
+  }
+  function say(m,c){var e=document.getElementById("emsg");e.textContent=m;e.className="msg "+(c||"");}
+  function open(){
+    draft=JSON.parse(JSON.stringify(CONFIG));dtag=cur&&cur.tags[0]||null;
+    var o=el('<div id="edit"><div class="sheet" role="dialog" aria-label="Chỉnh sửa câu hỏi"><div class="eh"><b>Chỉnh sửa câu hỏi</b>'+
+      (API.needsToken?'<input class="tok" id="etok" type="password" placeholder="Mật khẩu sửa" autocomplete="off">':'')+
+      '<button type="button" id="erender">Render lại</button><button type="button" class="pri" id="esave">Lưu</button><button type="button" id="ereset" class="dng">Về mặc định</button><button type="button" id="eclose">Đóng</button></div><div class="msg" id="emsg"></div><div class="eb" id="ebody"></div></div></div>');
+    document.body.appendChild(o);pane=document.getElementById("ebody");render();
+    var tk=document.getElementById("etok");if(tk){try{tk.value=sessionStorage.getItem("tok")||"";}catch(e){}tk.addEventListener("input",function(){try{sessionStorage.setItem("tok",tk.value);}catch(e){}});}
+    o.addEventListener("mousedown",function(e){if(e.target===o)close();});
+    pane.addEventListener("click",function(e){
+      var b=e.target.closest("button");if(!b)return;
+      if(b.dataset.tag){sync();dtag=b.dataset.tag;render();}
+      else if(b.dataset.add!==undefined){sync();draft.panels[dtag][+b.dataset.add].qs.push({id:"q"+Date.now(),title:"Câu hỏi mới",opts:[["Đáp án A"],["Đáp án B"]]});render();
+        var ds=pane.querySelectorAll("details");ds[+b.dataset.add].open=true;}
+      else if(b.dataset.del){var a=b.dataset.del.split(".");sync();draft.panels[dtag][+a[0]].qs.splice(+a[1],1);render();pane.querySelectorAll("details")[+a[0]].open=true;}
+    });
+    document.getElementById("eclose").onclick=close;
+    document.getElementById("erender").onclick=function(){sync();CONFIG=JSON.parse(JSON.stringify(draft));rerender();say("Đã render lại (chưa lưu lên server).","ok");};
+    document.getElementById("esave").onclick=function(){
+      sync();var body=JSON.stringify(draft);
+      fetch("api/config",{method:"PUT",headers:hdr(),body:body}).then(function(r){return r.json().then(function(j){return [r.ok,j];});}).then(function(x){
+        if(x[0]){CONFIG=JSON.parse(body);rerender();say("Đã lưu. Mọi người mở trang sẽ thấy bản này.","ok");}else say(x[1].error||"Lưu thất bại","err");
+      }).catch(function(){say("Không kết nối được server.","err");});
+    };
+    document.getElementById("ereset").onclick=function(){
+      fetch("api/config",{method:"DELETE",headers:hdr()}).then(function(r){return r.json().then(function(j){return [r.ok,j];});}).then(function(x){
+        if(x[0]){CONFIG=JSON.parse(JSON.stringify(DEFAULT_CONFIG));draft=JSON.parse(JSON.stringify(CONFIG));render();rerender();say("Đã về câu hỏi mặc định.","ok");}else say(x[1].error||"Thất bại","err");
+      }).catch(function(){say("Không kết nối được server.","err");});
+    };
+  }
+  function close(){var o=document.getElementById("edit");if(o)o.remove();pane=null;}
+  btn.addEventListener("click",open);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")close();});
 })();
 </script>
 </body>
