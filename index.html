@@ -35,7 +35,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:0 8px;color:var(--muted);background:#fff;line-height:20px}
 .player{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:10px;padding:14px}
 .pbtn{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:18px;cursor:pointer}
-.wavewrap{flex:1;min-width:0}
+.wavewrap{flex:1;min-width:0;position:relative;height:72px}
+.wavewrap canvas{position:absolute;inset:0;width:100%;height:100%}
 canvas{display:block;width:100%;height:72px;cursor:pointer}
 canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .time{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -46,16 +47,20 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tab .n{font-size:12px;color:var(--muted);margin-left:6px;font-weight:400}
 .panel{padding-top:18px}
 .panel .intro{font-size:15px;color:var(--muted);margin-bottom:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:26px 32px}
-.q h4{margin:0 0 4px;font-size:16px;font-weight:600}
-.q .desc{margin:0 0 8px;font-size:15px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
-.opt{display:flex;align-items:flex-start;gap:10px;padding:5px 0;cursor:pointer}
+.qlist{display:flex;flex-direction:column;gap:24px;max-width:780px}
+.q h4{margin:0 0 8px;font-size:17px;font-weight:400;line-height:1.5}
+.q h4 b{font-weight:700}
+.q .desc{margin:0 0 10px;font-size:16px;color:var(--ink);background:#f7f8f9;border-left:3px solid var(--line);padding:8px 12px}
+.opts{display:flex;gap:4px 36px}
+.opts.row{flex-wrap:wrap}
+.opts.stack{flex-direction:column}
+.opt{display:flex;align-items:baseline;gap:8px;padding:4px 0;cursor:pointer}
 .opt input{position:absolute;opacity:0;pointer-events:none}
-.mark{flex:none;width:18px;height:18px;margin-top:3px;border:2px solid #9aa0a6;border-radius:50%;background:#fff}
-.opt input:checked+.mark{border-color:var(--accent);background:radial-gradient(circle,var(--accent) 0 4px,#fff 5px)}
-.opt input:focus-visible+.mark{outline:2px solid var(--accent);outline-offset:2px}
-.opt:hover .mark{border-color:var(--accent)}
-.opt .txt{font-size:16px}
+.key{flex:none;display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:50%;border:1.5px solid transparent;font-weight:700;font-size:15px;transform:translateY(2px)}
+.opt:hover .key{border-color:#9aa0a6}
+.opt input:checked+.key{background:var(--accent);border-color:var(--accent);color:#fff}
+.opt input:focus-visible+.key{outline:2px solid var(--accent);outline-offset:2px}
+.opt .txt{font-size:17px}
 .opt .txt small{display:block;font-size:14px;color:var(--muted)}
 .note{margin-top:26px;font-size:14px;color:var(--muted)}
 .doc ul{margin:0 0 8px;padding-left:1.2em}
@@ -131,9 +136,20 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         <li>“Dạ”, “vâng” mở đầu câu trả lời của chính người đó không phải tiếng đệm.</li>
         <li>Tiếng cười, tiếng ho không tính. Chỉ nghe phần lời nói.</li>
       </ul>
-      <h3>Cảm xúc và kiểu trò chuyện</h3>
-      <p><b>Vui</b> giọng tươi, cười. <b>Buồn</b> giọng trầm, chậm. <b>Tức giận</b> giọng gắt, to. <b>Bình thường</b> giọng đều.</p>
-      <p><b>Kể chuyện</b> một người kể, người kia nghe. <b>Phỏng vấn</b> một người hỏi, một người trả lời. <b>Chia sẻ</b> nói về cảm nghĩ, kinh nghiệm của mình. <b>Trò chuyện thường</b> hai bên nói qua lại tự nhiên.</p>
+      <h3>Ai nói tiếp?</h3>
+      <p>Câu hỏi này đoán lượt tiếp theo. <b>Nói xong</b> hoặc <b>Chen ngang</b> thường là người kia nói. <b>Ngừng giữa chừng</b> và <b>Tiếng đệm</b> thường là người đang nói nói tiếp.</p>
+    </section>
+
+    <section data-for="emo">
+      <h3>Cảm xúc</h3>
+      <p><b>Vui</b> giọng tươi, có tiếng cười. <b>Buồn</b> giọng trầm, chậm. <b>Tức giận</b> giọng gắt, to. <b>Bình thường</b> giọng đều, không nổi bật.</p>
+      <p>Âm lượng và tốc độ chọn theo cảm nhận khi nghe, so với cách nói chuyện thông thường.</p>
+    </section>
+
+    <section data-for="kind">
+      <h3>Kiểu trò chuyện</h3>
+      <p><b>Kể chuyện:</b> một người kể, người kia nghe. <b>Phỏng vấn:</b> một người hỏi, một người trả lời. <b>Chia sẻ:</b> nói về cảm nghĩ, kinh nghiệm của mình. <b>Trò chuyện thường:</b> hai bên nói qua lại tự nhiên.</p>
+      <p>Tiếng đệm là các tiếng ngắn như “ừ”, “dạ”, “vâng” người nghe chêm vào khi người kia đang nói.</p>
     </section>
 
     <section data-for="style">
@@ -256,23 +272,36 @@ function scoreQs(prefix,scale,descs){
 var PANELS = {
   turntaking:[
     {id:"turn",name:"Lượt nói",intro:"Nghe kỹ vài giây cuối của đoạn ghi âm.",qs:[
-      {id:"t1",title:"1. Ở cuối đoạn, chuyện gì đang xảy ra?",opts:[["Nói xong"],["Ngừng giữa chừng"],["Tiếng đệm"],["Chen ngang"],["Không rõ"]]},
-      {id:"t2",title:"2. Cảm xúc của câu nói",opts:[["Vui"],["Buồn"],["Bình thường"],["Tức giận"]]},
-      {id:"t3",title:"3. Kiểu trò chuyện",opts:[["Kể chuyện"],["Phỏng vấn"],["Chia sẻ"],["Trò chuyện thường"]]}
+      {id:"t1",title:"Ở cuối đoạn ghi âm, chuyện gì đang xảy ra?",opts:[["Nói xong"],["Ngừng giữa chừng"],["Tiếng đệm"],["Chen ngang"],["Không rõ"]]},
+      {id:"t2",title:"Ở cuối đoạn, có mấy người đang nói?",opts:[["Một người"],["Hai người nói cùng lúc"],["Không ai nói"]]},
+      {id:"t3",title:"Sau đoạn này, ai sẽ là người nói tiếp?",opts:[["Người đang nói tiếp tục nói"],["Người kia sẽ nói"],["Không rõ"]]},
+      {id:"t4",title:"Bạn chắc chắn đến đâu về đáp án ở Câu 1?",opts:[["Chắc chắn"],["Hơi phân vân"],["Không chắc"]]}
+    ]},
+    {id:"emo",name:"Cảm xúc",intro:"Chọn theo giọng của người nói ở cuối đoạn.",qs:[
+      {id:"m1",title:"Cảm xúc của câu nói là gì?",opts:[["Vui"],["Buồn"],["Bình thường"],["Tức giận"]]},
+      {id:"m2",title:"Cảm xúc đó mạnh hay nhẹ?",opts:[["Nhẹ"],["Vừa"],["Mạnh"]]},
+      {id:"m3",title:"Âm lượng giọng nói thế nào?",opts:[["Nhỏ"],["Vừa"],["To"]]},
+      {id:"m4",title:"Tốc độ nói thế nào?",opts:[["Chậm"],["Vừa"],["Nhanh"]]}
+    ]},
+    {id:"kind",name:"Kiểu trò chuyện",intro:"Chọn theo cả đoạn hội thoại.",qs:[
+      {id:"k1",title:"Cuộc trò chuyện thuộc kiểu nào?",opts:[["Kể chuyện"],["Phỏng vấn"],["Chia sẻ"],["Trò chuyện thường"]]},
+      {id:"k2",title:"Có mấy người tham gia cuộc trò chuyện?",opts:[["Một người"],["Hai người"],["Ba người trở lên"]]},
+      {id:"k3",title:"Không khí của cuộc trò chuyện?",opts:[["Thân mật, thoải mái"],["Nghiêm túc, trang trọng"],["Căng thẳng"]]},
+      {id:"k4",title:"Người nghe có chêm tiếng đệm (ừ, dạ, vâng) trong đoạn này không?",opts:[["Có, nhiều lần"],["Có, một vài lần"],["Không có"]]}
     ]}
   ],
   slm:[
     {id:"style",name:"Phong cách",intro:"Chọn phong cách giao tiếp của người nói.",qs:[
-      {id:"s1",title:"1. Phong cách giao tiếp",opts:[
+      {id:"s1",title:"Phong cách giao tiếp",opts:[
         ["Marketing – Quảng cáo","Khỏe, tươi sáng, nhịp nhanh, nhấn dứt khoát"],
         ["Kể chuyện – Nội dung sáng tạo","Trầm ấm, giàu cảm xúc, ngữ điệu linh hoạt"],
         ["Hội thoại – Đời thường","Tự nhiên, thả lỏng, gần gũi"],
         ["Chính thống – Trang trọng – Phát biểu","Trầm ổn, uy lực, rõ chữ"]]},
-      {id:"s2",title:"2. Có nên bỏ qua file này không?",opts:[
+      {id:"s2",title:"Có nên bỏ qua file này không?",opts:[
         ["Không, file dùng được"],
         ["Bỏ qua: chất lượng âm thanh kém","Nhiễu nặng, rè hoặc mất tiếng"],
         ["Bỏ qua: giọng không tự nhiên","Méo tiếng, biến đổi giọng"]]},
-      {id:"s3",title:"3. Bạn chắc chắn đến đâu?",opts:[["Chắc chắn"],["Hơi phân vân"],["Không chắc"]]}
+      {id:"s3",title:"Bạn chắc chắn đến đâu?",opts:[["Chắc chắn"],["Hơi phân vân"],["Không chắc"]]}
     ]},
     {id:"content",name:"Nội dung",intro:"Chấm điểm mức độ phù hợp của từng đoạn mô tả về nội dung lời nói.",qs:[]},
     {id:"voice",name:"Sắc thái giọng",intro:"Chấm điểm mô tả về người nói: giới tính, độ tuổi, số người, cảm xúc, cách nói.",
@@ -289,22 +318,25 @@ var PANELS = {
       "Ngoài trời lúc mưa to, có tiếng sấm."]}
   ]
 };
-var SECTION_FOR={turn:"turn",style:"style",content:"content",voice:"voice",env:"env"};
 
 /* ---- Dựng giao diện câu hỏi ---- */
 var tabsEl=document.getElementById("tabs"), panelsEl=document.getElementById("panels");
 var activePanels=[], activeId=null, uid=0;
 panelsEl.addEventListener("change",updCounts);
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
-function buildQ(q){
-  var h='<div class="q"><h4>'+esc(q.title)+'</h4>';
+function buildQ(q,num){
+  var maxLen=0;
+  q.opts.forEach(function(o){var s=q.score?o[1]:o[0];if(s.length>maxLen)maxLen=s.length;});
+  var cls=(!q.score&&maxLen<=24)?"row":"stack";
+  var h='<div class="q"><h4><b>Câu '+num+':</b> '+esc(q.title)+'</h4>';
   if(q.desc)h+='<p class="desc">'+esc(q.desc)+'</p>';
+  h+='<div class="opts '+cls+'">';
   q.opts.forEach(function(o,i){
-    var id="o"+(uid++), pre="", txt, sub="";
-    if(q.score){pre='<b>'+(o[0]==="0"?"–":o[0])+'</b> ';txt=o[1];sub=o[2]||"";}else{txt=o[0];sub=o[1]||"";}
-    h+='<label class="opt"><input type="radio" name="'+q.id+'" id="'+id+'"><span class="mark" aria-hidden="true"></span><span class="txt">'+pre+esc(txt)+(sub?'<small>'+esc(sub)+'</small>':"")+'</span></label>';
+    var id="o"+(uid++), key, txt, sub="";
+    if(q.score){key=o[0]==="0"?"–":o[0];txt=o[1];sub=o[2]||"";}else{key="ABCDEF"[i]+".";txt=o[0];sub=o[1]||"";}
+    h+='<label class="opt"><input type="radio" name="'+q.id+'" id="'+id+'"><span class="key">'+key+'</span><span class="txt">'+esc(txt)+(sub?'<small>'+esc(sub)+'</small>':"")+'</span></label>';
   });
-  return h+'</div>';
+  return h+'</div></div>';
 }
 function answered(p){var n=0;p.qs.forEach(function(q){if(panelsEl.querySelector('input[name="'+q.id+'"]:checked'))n++;});return n;}
 function updCounts(){activePanels.forEach(function(p){var el=document.getElementById("cnt-"+p.id);if(el)el.textContent=answered(p)+"/"+p.qs.length;});}
@@ -333,7 +365,7 @@ function buildPanels(s){
     b.addEventListener("click",function(){showPanel(p.id);});
     tabsEl.appendChild(b);
     var d=document.createElement("section");d.className="panel";d.id="pn-"+p.id;d.setAttribute("role","tabpanel");
-    d.innerHTML='<p class="intro">'+esc(p.intro)+'</p><div class="grid">'+p.qs.map(buildQ).join("")+'</div>';
+    d.innerHTML='<p class="intro">'+esc(p.intro)+'</p><div class="qlist">'+p.qs.map(function(q,i){return buildQ(q,i+1);}).join("")+'</div>';
     panelsEl.appendChild(d);
   });
   showPanel(activePanels[0].id);updCounts();
@@ -382,6 +414,7 @@ canvas.addEventListener("keydown",function(e){
   if(e.key==="ArrowRight"){audio.currentTime=Math.min(audio.duration||0,audio.currentTime+1);}
 });
 window.addEventListener("resize",function(){if(cur)draw();});
+if(window.ResizeObserver){new ResizeObserver(function(){if(cur)draw();}).observe(document.querySelector(".wavewrap"));}
 
 var box=document.getElementById("samples");
 SAMPLES.forEach(function(s,ix){
