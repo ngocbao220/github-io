@@ -17,6 +17,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font
 header{padding:14px 20px;border-bottom:1px solid var(--line);font-weight:600;font-size:18px}
 .app{position:relative;display:grid;grid-template-columns:250px minmax(0,1fr) var(--rw);height:calc(100% - 53px)}
 .col{padding:20px;min-width:0;overflow-y:auto}
+.col{scrollbar-width:thin;scrollbar-color:#cfd3d8 transparent;scrollbar-gutter:stable}
+.col::-webkit-scrollbar{width:6px}
+.col::-webkit-scrollbar-track{background:transparent}
+.col::-webkit-scrollbar-thumb{background:#cfd3d8;border-radius:3px}
+.col::-webkit-scrollbar-thumb:hover{background:#b3b8bf}
 .left{border-right:1px solid var(--line)}
 .right{border-left:1px solid var(--line);background:#fafafa}
 h2{font-size:14px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
