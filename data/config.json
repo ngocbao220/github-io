@@ -241,59 +241,242 @@
    {
     "id": "style",
     "name": "Phong cách",
-    "intro": "Chọn phong cách giao tiếp của người nói.",
+    "intro": "Nghe cả đoạn và chọn theo những gì nghe được.",
     "qs": [
      {
-      "id": "s1",
-      "title": "Phong cách giao tiếp",
+      "id": "env_presence",
+      "codes": [
+       "YES",
+       "NO",
+       "UNK"
+      ],
+      "title": "Môi trường trong audio: ngoài giọng người nói, bạn có nghe thấy âm thanh nền hoặc dấu hiệu của không gian xung quanh không?",
+      "desc": "Chọn theo những gì nghe được, không đoán theo nội dung. Quy tắc: nếu phải đeo tai nghe và tăng âm lượng mới nghe thấy thì chọn B.",
       "opts": [
        [
-        "Marketing – Quảng cáo",
-        "Khỏe, tươi sáng, nhịp nhanh, nhấn dứt khoát"
+        "Có",
+        "Nghe rõ tiếng người khác, xe cộ, quạt, nhạc, tiếng click, hoặc tiếng vang của phòng. Bạn nhận ra được nếu tập trung nghe."
        ],
        [
-        "Kể chuyện – Nội dung sáng tạo",
-        "Trầm ấm, giàu cảm xúc, ngữ điệu linh hoạt"
+        "Không",
+        "Nền gần như im, chỉ có giọng nói. Tiếng ù rất nhỏ, đều, không nhận ra nguồn thì vẫn tính là B."
        ],
        [
-        "Hội thoại – Đời thường",
-        "Tự nhiên, thả lỏng, gần gũi"
-       ],
-       [
-        "Chính thống – Trang trọng – Phát biểu",
-        "Trầm ổn, uy lực, rõ chữ"
+        "Không nghe rõ / không chắc"
        ]
       ]
      },
      {
-      "id": "s2",
-      "title": "Có nên bỏ qua file này không?",
+      "id": "device",
+      "codes": [
+       "close_mic",
+       "studio_mic",
+       "consumer_device",
+       "broadcast",
+       "phone",
+       "distant_mic",
+       "UNK"
+      ],
+      "title": "Thiết bị thu audio: giọng nói này được thu bằng loại thiết bị nào?",
+      "desc": "Chọn theo chất lượng và cảm giác khoảng cách của giọng.",
       "opts": [
        [
-        "Không, file dùng được"
+        "close_mic",
+        "Giọng gần và rõ, thu sát miệng nhưng không có chất “phòng thu” chuyên nghiệp (micro cài áo, micro tai nghe tốt)."
        ],
        [
-        "Bỏ qua: chất lượng âm thanh kém",
-        "Nhiễu nặng, rè hoặc mất tiếng"
+        "studio_mic",
+        "Giọng dày, sạch, rất ít nhiễu, như thu ở phòng thu bằng micro chuyên dụng."
        ],
        [
-        "Bỏ qua: giọng không tự nhiên",
-        "Méo tiếng, biến đổi giọng"
+        "consumer_device",
+        "Chất lượng đời thường như thu từ điện thoại, laptop hoặc tai nghe thường, có thể hơi rè hoặc vang."
+       ],
+       [
+        "broadcast",
+        "Giọng kiểu phát thanh hoặc truyền hình, đã được xử lý, âm lượng đều."
+       ],
+       [
+        "phone",
+        "Nghe như qua cuộc gọi điện thoại, băng tần hẹp, giọng mỏng."
+       ],
+       [
+        "distant_mic",
+        "Giọng xa, nhỏ, vang, như thu từ giữa phòng."
+       ],
+       [
+        "Không nghe rõ / không chắc"
        ]
       ]
      },
      {
-      "id": "s3",
-      "title": "Bạn chắc chắn đến đâu?",
+      "id": "location",
+      "codes": [
+       "studio",
+       "recording_booth",
+       "home",
+       "office",
+       "hall",
+       "vehicle",
+       "OTHER",
+       "UNK"
+      ],
+      "title": "Địa điểm thu audio: giọng nói này được thu ở đâu?",
+      "desc": "Chọn theo tiếng vang và âm thanh nền của không gian.",
       "opts": [
        [
-        "Chắc chắn"
+        "studio",
+        "Rất khô, không vang, nền cực sạch."
        ],
        [
-        "Hơi phân vân"
+        "recording_booth",
+        "Như studio nhưng gần hơn, có cảm giác không gian nhỏ và kín."
        ],
        [
-        "Không chắc"
+        "home",
+        "Không gian sinh hoạt gia đình, có vang nhẹ của phòng, có thể có tiếng nền đời thường."
+       ],
+       [
+        "office",
+        "Phòng làm việc, có tiếng máy lạnh, bàn phím hoặc người nói xa."
+       ],
+       [
+        "hall",
+        "Không gian lớn, vang dài, như hội trường."
+       ],
+       [
+        "vehicle",
+        "Có tiếng động cơ hoặc rung của xe."
+       ],
+       [
+        "Nơi khác",
+        "Ngoài trời, lớp học, phòng họp, đường phố… ghi tên nếu biết."
+       ],
+       [
+        "Không xác định",
+        "Không đủ dấu hiệu để đoán."
+       ]
+      ]
+     },
+     {
+      "id": "situation",
+      "codes": [
+       "reading",
+       "audiobook",
+       "storytelling",
+       "lecture",
+       "documentary",
+       "news",
+       "conversation",
+       "advertisement",
+       "OTHER",
+       "UNK"
+      ],
+      "title": "Hoàn cảnh của câu nói: câu nói này được nói trong hoàn cảnh nào (đọc, trả lời phỏng vấn, podcast…)?",
+      "desc": "Chọn theo cách người nói đang làm gì, không theo chủ đề.",
+      "opts": [
+       [
+        "reading",
+        "Đọc từng câu rời rạc hoặc đoạn văn, không có người nghe, ví dụ đọc để thu mẫu."
+       ],
+       [
+        "audiobook",
+        "Đọc truyện hoặc sách thành tiếng, nhịp đều, có dẫn dắt."
+       ],
+       [
+        "storytelling",
+        "Kể một câu chuyện cho người nghe, có cảm xúc."
+       ],
+       [
+        "lecture",
+        "Giảng bài hoặc thuyết trình, trình bày kiến thức."
+       ],
+       [
+        "documentary",
+        "Thuyết minh phim tài liệu hoặc giới thiệu thông tin khách quan."
+       ],
+       [
+        "news",
+        "Đọc bản tin hoặc phát thanh thời sự."
+       ],
+       [
+        "conversation",
+        "Nói chuyện hoặc trả lời người khác, kể cả phỏng vấn và podcast."
+       ],
+       [
+        "advertisement",
+        "Quảng cáo, giới thiệu sản phẩm."
+       ],
+       [
+        "Khác",
+        "Ghi tên nếu biết."
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "accent",
+      "codes": [
+       "NORTH",
+       "CENTRAL",
+       "SOUTH",
+       "FOREIGN",
+       "UNK"
+      ],
+      "title": "Giọng vùng miền (accent): người nói có giọng vùng miền nào?",
+      "desc": "Chọn theo cách phát âm, không theo nội dung.",
+      "opts": [
+       [
+        "Bắc"
+       ],
+       [
+        "Trung"
+       ],
+       [
+        "Nam"
+       ],
+       [
+        "Nước ngoài",
+        "Nói tiếng Việt nhưng giọng nước ngoài."
+       ],
+       [
+        "Không xác định",
+        "Clip quá ngắn hoặc giọng pha, khó nghe rõ."
+       ]
+      ]
+     },
+     {
+      "id": "style",
+      "codes": [
+       "formal",
+       "conversational",
+       "storytelling",
+       "marketing",
+       "UNK"
+      ],
+      "title": "Kiểu nói (style): người nói đang nói theo kiểu nào?",
+      "desc": "Chọn theo cách nói trong audio, không dựa vào nội dung câu chữ.",
+      "opts": [
+       [
+        "formal",
+        "Nói rõ ràng, chỉn chu, như đọc văn bản, thuyết trình, đọc tin hoặc giảng bài. Không có từ đệm hay ngập ngừng tự nhiên."
+       ],
+       [
+        "conversational",
+        "Nói tự nhiên như trò chuyện với ai đó, nhịp thay đổi, có từ đệm, ngắt nghỉ, giọng đời thường."
+       ],
+       [
+        "storytelling",
+        "Có nhấn nhá và lên xuống giọng để dẫn dắt, như kể chuyện, đọc truyện hoặc audiobook."
+       ],
+       [
+        "marketing",
+        "Giọng bán hàng, thuyết phục, nhấn mạnh sản phẩm hoặc lời kêu gọi."
+       ],
+       [
+        "Không nghe rõ / không chắc"
        ]
       ]
      }
