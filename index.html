@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hướng dẫn gán nhãn lượt nói</title>
+<style>
+/* Layout: một cột đọc rộng, mỗi nhãn là một thẻ có nút nghe lớn bên dưới */
+:root{
+  --bg:#f6f7f5; --card:#ffffff; --ink:#1d2421; --muted:#55615b; --line:#d9dfdb;
+  --accent:#0f6b5c; --accent-ink:#ffffff; --soft:#e3f1ed; --warn:#fff3d6; --warn-ink:#5a4200;
+  --font:"Be Vietnam Pro","Segoe UI",Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121715; --card:#1b2220; --ink:#eef2f0; --muted:#a6b3ad; --line:#2f3a36;
+    --accent:#5fcdb5; --accent-ink:#0b1512; --soft:#1e3a33; --warn:#3a2f10; --warn-ink:#f3dc9a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121715; --card:#1b2220; --ink:#eef2f0; --muted:#a6b3ad; --line:#2f3a36;
+  --accent:#5fcdb5; --accent-ink:#0b1512; --soft:#1e3a33; --warn:#3a2f10; --warn-ink:#f3dc9a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:20px;line-height:1.6}
+main{max-width:760px;margin:0 auto;padding:24px 16px 64px;display:flex;flex-direction:column;gap:20px}
+h1{font-size:30px;line-height:1.25;margin:8px 0 0;text-wrap:balance}
+h2{font-size:24px;margin:16px 0 0;text-wrap:balance}
+h3{font-size:22px;margin:0}
+p{margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.summary{background:var(--soft);border-color:transparent}
+ol,ul{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
+.tag{display:inline-block;align-self:flex-start;font-size:15px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 10px}
+.k{font-weight:700}
+.play{display:flex;align-items:center;gap:14px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:14px 18px;font:inherit;font-weight:700;cursor:pointer;width:100%;text-align:left}
+.play:focus-visible,.pick:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.play .ico{width:34px;height:34px;border-radius:50%;background:var(--accent-ink);color:var(--accent);display:grid;place-items:center;font-size:16px;flex:none}
+.play small{display:block;font-weight:400;font-size:16px;opacity:.9}
+.note{background:var(--warn);color:var(--warn-ink);border-radius:12px;padding:14px 16px;font-size:18px}
+.quick{display:flex;flex-direction:column;gap:10px}
+.quick div{display:flex;gap:12px;align-items:baseline;border-top:1px solid var(--line);padding-top:10px}
+.quick div:first-child{border-top:0;padding-top:0}
+.quick b{flex:none;min-width:9.5em}
+@media (max-width:480px){body{font-size:19px}.quick div{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Hướng dẫn gán nhãn lượt nói</h1>
+
+  <section class="card summary" aria-labelledby="tt">
+    <h2 id="tt" style="margin:0">Tóm tắt yêu cầu</h2>
+    <ol>
+      <li>Bạn sẽ nghe một đoạn hội thoại ngắn.</li>
+      <li>Hãy chú ý <span class="k">phần cuối cùng</span> của đoạn âm thanh.</li>
+      <li>Trên trang gán nhãn, chọn <span class="k">một</span> trong năm đáp án cho biết chuyện gì đang xảy ra ở cuối đoạn.</li>
+      <li>Không chắc thì nghe lại. Vẫn không rõ thì chọn <span class="k">Không rõ</span>.</li>
+    </ol>
+  </section>
+
+  <p class="note">Các đoạn nghe thử dưới đây là cuộc trò chuyện thật, cắt từ một buổi ghi âm. Mỗi đoạn dừng đúng chỗ bạn cần chọn nhãn.</p>
+
+  <h2>Năm lựa chọn</h2>
+
+  <article class="card" id="noi-xong">
+    <span class="tag">Lựa chọn 1</span>
+    <h3>Nói xong</h3>
+    <p><span class="k">Nói nôm na:</span> người nói đã nói hết ý của mình và dừng lại. Đến lượt người kia trả lời.</p>
+    <p><span class="k">Cách nhận ra:</span> câu có đủ ý, giọng hạ xuống như kết thúc câu, hoặc vừa hỏi xong và chờ người kia đáp.</p>
+    <p><span class="k">Ví dụ:</span> Người nói: “Nếu mà không có mạng xã hội thì bản thân em sẽ bị chậm hơn một chút so với thời đại hiện tại ạ.” Nói hết ý rồi im lặng.</p>
+    <button class="play" data-src="audio/vi_du_1.mp3" type="button"><span class="ico" aria-hidden="true">▶</span><span>Nghe ví dụ 1<small>Chọn: Nói xong</small></span></button>
+  </article>
+
+  <article class="card" id="ngung">
+    <span class="tag">Lựa chọn 2</span>
+    <h3>Ngừng giữa chừng</h3>
+    <p><span class="k">Nói nôm na:</span> người nói chỉ dừng để nghĩ hoặc lấy hơi. Họ vẫn còn định nói tiếp, đừng chen vào.</p>
+    <p><span class="k">Cách nhận ra:</span> câu còn dang dở, hay có tiếng ngân dài như “ờ…”, “à…”, “mà…”, và giọng không hạ xuống.</p>
+    <p><span class="k">Ví dụ:</span> Người nói: “Em có cái quyết định nào tự hào nhất mà em đã thực hiện được không, mà em cảm thấy bản thân em tự tin nhất lúc đấy mà…” rồi ngập ngừng. Câu chưa hết, người nói còn nói tiếp.</p>
+    <button class="play" data-src="audio/vi_du_2.mp3" type="button"><span class="ico" aria-hidden="true">▶</span><span>Nghe ví dụ 2<small>Chọn: Ngừng giữa chừng</small></span></button>
+  </article>
+
+  <article class="card" id="dem">
+    <span class="tag">Lựa chọn 3</span>
+    <h3>Tiếng đệm</h3>
+    <p><span class="k">Nói nôm na:</span> người nghe chêm một tiếng ngắn như “dạ”, “ừ”, “vâng” để cho biết mình đang nghe. Họ không giành lời. Người đang nói vẫn nói tiếp.</p>
+    <p><span class="k">Cách nhận ra:</span> tiếng rất ngắn, nhỏ, và người nói chính không dừng lại.</p>
+    <p><span class="k">Ví dụ:</span> Người A đang nói, người B chêm một tiếng nhỏ “ờ”, người A vẫn nói tiếp như không có gì.</p>
+    <button class="play" data-src="audio/vi_du_3.mp3" type="button"><span class="ico" aria-hidden="true">▶</span><span>Nghe ví dụ 3<small>Chọn: Tiếng đệm</small></span></button>
+  </article>
+
+  <article class="card" id="chen">
+    <span class="tag">Lựa chọn 4</span>
+    <h3>Chen ngang</h3>
+    <p><span class="k">Nói nôm na:</span> người kia lên tiếng giữa lúc người đang nói chưa xong, và muốn giành lời để nói ý của mình.</p>
+    <p><span class="k">Cách nhận ra:</span> hai người nói cùng lúc, người chen vào nói to, nói dài, hay bắt đầu bằng “khoan đã”, “à mà”. Người đang nói thường bị cắt ngang.</p>
+    <p><span class="k">Ví dụ:</span> Người A đang nói dở: “Còn nếu mà à mình tự thi…” thì người B nói đè lên: “Tự đăng kí, tự đăng kí.” Người A bị cắt ngang.</p>
+    <button class="play" data-src="audio/vi_du_4.mp3" type="button"><span class="ico" aria-hidden="true">▶</span><span>Nghe ví dụ 4<small>Chọn: Chen ngang</small></span></button>
+  </article>
+
+  <article class="card" id="khong-ro">
+    <span class="tag">Lựa chọn 5</span>
+    <h3>Không rõ</h3>
+    <p><span class="k">Nói nôm na:</span> nghe không ra, hoặc nghe nhiều lần vẫn không biết chọn nhãn nào.</p>
+    <p><span class="k">Dùng khi:</span> chỉ có tiếng ồn, tiếng rè, im lặng hoàn toàn, hoặc tiếng nói bị đứt quá nhiều.</p>
+    <p><span class="k">Ví dụ:</span> một khoảng lặng, không có ai nói và không có gì để nghe.</p>
+    <button class="play" data-src="audio/vi_du_5.mp3" type="button"><span class="ico" aria-hidden="true">▶</span><span>Nghe ví dụ 5<small>Chọn: Không rõ</small></span></button>
+  </article>
+
+  <h2>Chọn nhanh</h2>
+  <section class="card quick">
+    <div><b>Nói xong</b><span>Ý trọn vẹn, đợi người kia trả lời.</span></div>
+    <div><b>Ngừng giữa chừng</b><span>Còn dang dở, người nói sẽ nói tiếp.</span></div>
+    <div><b>Tiếng đệm</b><span>Tiếng ngắn “dạ, ừ”, người nói chính vẫn nói tiếp.</span></div>
+    <div><b>Chen ngang</b><span>Người kia giành lời khi người nói chưa xong.</span></div>
+    <div><b>Không rõ</b><span>Nghe không ra hoặc không chắc.</span></div>
+  </section>
+
+  <h2>Ba điều dễ nhầm</h2>
+  <section class="card">
+    <ul>
+      <li><span class="k">Im lặng không có nghĩa là nói xong.</span> Nếu câu còn dang dở, đó là Ngừng giữa chừng.</li>
+      <li><span class="k">“Dạ, ừ” ngắn không phải là chen ngang.</span> Nó chỉ là Tiếng đệm nếu người nói chính vẫn nói tiếp.</li>
+      <li><span class="k">Đừng đoán nội dung.</span> Chỉ cần nghe ở cuối đoạn chuyện gì xảy ra.</li>
+    </ul>
+  </section>
+</main>
+<script>
+(function(){
+  var cur=null,curBtn=null;
+  function reset(b){var i=b.querySelector(".ico");if(i)i.textContent="▶";}
+  document.querySelectorAll(".play").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      try{
+        if(cur&&curBtn===btn&&!cur.paused){cur.pause();reset(btn);return;}
+        if(cur){cur.pause();if(curBtn)reset(curBtn);}
+        cur=new Audio(btn.getAttribute("data-src"));curBtn=btn;
+        btn.querySelector(".ico").textContent="■";
+        cur.addEventListener("ended",function(){reset(btn);});
+        var p=cur.play();
+        if(p&&p.catch)p.catch(function(){reset(btn);});
+      }catch(e){reset(btn);}
+    });
+  });
+})();
+</script>
+</body>
+</html>
