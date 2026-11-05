@@ -41,6 +41,7 @@ def valid(cfg):
                 if not (isinstance(q, dict) and isinstance(q.get("id"), str)
                         and isinstance(q.get("title"), str)
                         and isinstance(q.get("opts"), list)
+                        and isinstance(q.get("codes", []), list) and all(isinstance(x, str) for x in q.get("codes", []))
                         and all(isinstance(o, list) and o and all(isinstance(x, str) for x in o) for o in q["opts"])):
                     return False
             if p.get("type") == "score":

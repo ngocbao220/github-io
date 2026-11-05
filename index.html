@@ -94,6 +94,9 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .exrow:first-child{border-top:0}
 .exrow .dplay{margin-left:0}
 .hide{display:none!important}
+.exp{margin:22px 0 8px;display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.exp button{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px 12px;cursor:pointer;color:var(--ink)}
+.exp button:hover{background:#f5f6f8}
 .hr{display:flex;align-items:center;gap:10px}
 .ed{font:inherit;font-size:15px;font-weight:500;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer}
 .ed:hover{background:#f5f6f8}
@@ -153,6 +156,7 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </div>
     <div class="tabs" id="tabs" role="tablist" aria-label="Phương diện gán nhãn"></div>
     <div id="panels"></div>
+    <div class="exp"><button type="button" id="expbtn">Tải kết quả mẫu này (JSON)</button><span id="expmsg"></span></div>
     <p class="note">Đây là bản thử. Lựa chọn của bạn chỉ hiện trên trang này và chưa được gửi đi. Các đoạn mô tả trong phần chấm điểm là nội dung minh hoạ.</p>
   </main>
 
@@ -216,6 +220,7 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <section data-for="tvoice">
       <h3>Sắc thái giọng</h3>
       <p><b>Giọng ở cuối câu:</b> hạ xuống thường là nói xong <button class="dplay" type="button" data-audio="audio/vi_du_1.mp3">▶ Nghe ví dụ</button>. Lơ lửng thường là còn nói tiếp <button class="dplay" type="button" data-audio="audio/vi_du_2.mp3">▶ Nghe ví dụ</button>. Lên cao thường là đang hỏi.</p>
+      <p><b>Âm lượng và tốc độ cuối câu:</b> nhỏ dần hoặc chậm lại thường báo hiệu sắp nói xong. To lên hoặc nhanh lên thường là còn nói tiếp, hoặc đang giành lời.</p>
       <p><b>Vui</b> giọng tươi, có tiếng cười. <b>Buồn</b> giọng trầm, chậm. <b>Tức giận</b> giọng gắt, to. <b>Bình thường</b> giọng đều, không nổi bật.</p>
     </section>
     <section data-for="tenv">
@@ -347,29 +352,31 @@ function scoreQs(prefix,scale,descs){
 /* Mỗi tag quyết định các phương diện (panel) hiện ra */
 var PANELS = {
   turntaking:[
-    {id:"tstyle",name:"Phong cách",intro:"Nhận xét về cách hai người trò chuyện trong cả đoạn.",qs:[
-      {id:"s1",title:"Cuộc trò chuyện thuộc kiểu nào?",opts:[["Kể chuyện"],["Phỏng vấn"],["Chia sẻ"],["Trò chuyện thường"]]},
-      {id:"s2",title:"Nhịp độ cuộc trò chuyện thế nào?",opts:[["Chậm rãi"],["Bình thường"],["Dồn dập"]]},
-      {id:"s3",title:"Người nói có hay ngập ngừng (ờ, ừm, mà…) không?",opts:[["Không"],["Thỉnh thoảng"],["Rất nhiều"]]},
-      {id:"s4",title:"Hai người có hay ngắt lời nhau không?",opts:[["Không"],["Thỉnh thoảng"],["Thường xuyên"]]}
+    {id:"tstyle",name:"Phong cách",intro:"Nhận xét chung về cả đoạn trò chuyện.",qs:[
+      {id:"genre",codes:["STORY","INTERVIEW","SHARE","CHAT"],title:"Cuộc trò chuyện thuộc kiểu nào?",opts:[["Kể chuyện"],["Phỏng vấn"],["Chia sẻ"],["Trò chuyện thường"]]},
+      {id:"pace",codes:["SLOW","NORMAL","FAST"],title:"Nhịp độ cuộc trò chuyện thế nào?",opts:[["Chậm rãi"],["Bình thường"],["Dồn dập"]]},
+      {id:"disfluency",codes:["NONE","SOME","MANY"],title:"Người nói có hay ngập ngừng (ờ, ừm, mà…) không?",opts:[["Không"],["Thỉnh thoảng"],["Rất nhiều"]]},
+      {id:"interrupt_rate",codes:["NONE","SOME","OFTEN"],title:"Hai người có hay ngắt lời nhau không?",opts:[["Không"],["Thỉnh thoảng"],["Thường xuyên"]]},
+      {id:"usable",codes:["OK","BAD_AUDIO","UNNATURAL"],title:"Có nên bỏ qua file này không?",opts:[["Không, file dùng được"],["Bỏ qua: chất lượng âm thanh kém","Nhiễu nặng, rè hoặc mất tiếng"],["Bỏ qua: giọng không tự nhiên","Méo tiếng, biến đổi giọng"]]}
     ]},
     {id:"tcontent",name:"Nội dung",intro:"Nghe kỹ vài giây cuối. Lời nói ở đó đang đi đến đâu?",qs:[
-      {id:"c1",title:"Ở cuối đoạn ghi âm, chuyện gì đang xảy ra?",opts:[["Nói xong"],["Ngừng giữa chừng"],["Tiếng đệm"],["Chen ngang"],["Không rõ"]]},
-      {id:"c2",title:"Câu cuối cùng có trọn nghĩa không?",opts:[["Trọn nghĩa"],["Bỏ lửng"],["Không rõ"]]},
-      {id:"c3",title:"Người kia có nên trả lời ngay lúc này không?",opts:[["Có"],["Chưa nên"],["Không rõ"]]},
-      {id:"c4",title:"Sau đoạn này, ai sẽ là người nói tiếp?",opts:[["Người đang nói tiếp tục nói"],["Người kia sẽ nói"],["Không rõ"]]}
+      {id:"event",codes:["EOT","MOT","BC","INT","UNK"],title:"Ở cuối đoạn ghi âm, chuyện gì đang xảy ra?",opts:[["Nói xong","Nói hết ý, chờ người kia đáp"],["Ngừng giữa chừng","Chỉ nghỉ để nghĩ, sẽ nói tiếp"],["Tiếng đệm","Người nghe chêm “ừ”, “dạ”, người nói vẫn nói tiếp"],["Chen ngang","Người kia nói cả câu để giành lời"],["Không rõ"]]},
+      {id:"complete",codes:["COMPLETE","INCOMPLETE","UNK"],title:"Câu cuối cùng có trọn nghĩa không?",opts:[["Trọn nghĩa"],["Bỏ lửng"],["Không rõ"]]},
+      {id:"respond",codes:["YES","NO","UNK"],title:"Người kia có nên trả lời ngay lúc này không?",opts:[["Có"],["Chưa nên"],["Không rõ"]]},
+      {id:"next",codes:["SAME","OTHER","UNK"],title:"Sau đoạn này, ai sẽ là người nói tiếp?",opts:[["Người đang nói tiếp tục nói"],["Người kia sẽ nói"],["Không rõ"]]},
+      {id:"confidence",codes:["HIGH","MID","LOW"],title:"Bạn chắc chắn đến đâu về câu trả lời ở mục này?",opts:[["Chắc chắn"],["Hơi phân vân"],["Không chắc"]]}
     ]},
     {id:"tvoice",name:"Sắc thái giọng",intro:"Chọn theo giọng của người nói ở cuối đoạn.",qs:[
-      {id:"v1",title:"Giọng ở cuối câu thế nào?",opts:[["Hạ xuống"],["Giữ nguyên, lơ lửng"],["Lên cao như câu hỏi"]]},
-      {id:"v2",title:"Cảm xúc của câu nói là gì?",opts:[["Vui"],["Buồn"],["Bình thường"],["Tức giận"]]},
-      {id:"v3",title:"Âm lượng giọng nói thế nào?",opts:[["Nhỏ"],["Vừa"],["To"]]},
-      {id:"v4",title:"Tốc độ nói thế nào?",opts:[["Chậm"],["Vừa"],["Nhanh"]]}
+      {id:"final_pitch",codes:["FALL","LEVEL","RISE"],title:"Giọng ở cuối câu thế nào?",opts:[["Hạ xuống"],["Giữ nguyên, lơ lửng"],["Lên cao như câu hỏi"]]},
+      {id:"emotion",codes:["HAPPY","SAD","NEUTRAL","ANGRY"],title:"Cảm xúc của câu nói là gì?",opts:[["Vui"],["Buồn"],["Bình thường"],["Tức giận"]]},
+      {id:"final_volume",codes:["FADING","STEADY","LOUDER"],title:"Âm lượng ở cuối câu thế nào?",opts:[["Nhỏ dần"],["Giữ đều"],["To lên"]]},
+      {id:"final_speed",codes:["SLOWING","STEADY","FASTER"],title:"Tốc độ nói ở cuối câu thế nào?",opts:[["Chậm lại"],["Như cũ"],["Nhanh lên"]]}
     ]},
     {id:"tenv",name:"Âm thanh môi trường",intro:"Chú ý những gì xảy ra ngoài lời của người nói chính.",qs:[
-      {id:"e1",title:"Ở cuối đoạn, có mấy người đang nói?",opts:[["Một người"],["Hai người nói cùng lúc"],["Không ai nói"]]},
-      {id:"e2",title:"Có ai chêm tiếng đệm (ừ, dạ, vâng…) không?",opts:[["Có"],["Không"],["Không rõ"]]},
-      {id:"e3",title:"Khoảng lặng ở cuối đoạn dài bao lâu?",opts:[["Không có"],["Dưới 1 giây"],["Hơn 1 giây"]]},
-      {id:"e4",title:"Tiếng nền hoặc chất lượng âm thanh có làm khó nghe không?",opts:[["Nghe rõ"],["Hơi khó nghe"],["Không nghe ra"]]}
+      {id:"speakers_end",codes:["ONE","OVERLAP","NONE"],title:"Ở cuối đoạn, có mấy người đang nói?",opts:[["Một người"],["Hai người nói cùng lúc"],["Không ai nói"]]},
+      {id:"backchannel",codes:["YES","NO","UNK"],title:"Trong đoạn có ai chêm tiếng đệm (ừ, dạ, vâng…) không?",opts:[["Có"],["Không"],["Không rõ"]]},
+      {id:"end_gap",codes:["NONE","SHORT","LONG"],title:"Khoảng lặng ngay cuối đoạn dài bao lâu?",opts:[["Không có"],["Ngắn, chưa tới 1 giây"],["Dài, hơn 1 giây"]]},
+      {id:"noise",codes:["CLEAN","NOISY","UNINTELL"],title:"Tiếng nền hoặc chất lượng âm thanh có làm khó nghe không?",opts:[["Nghe rõ"],["Hơi khó nghe"],["Không nghe ra"]]}
     ]}
   ],
   slm:[
@@ -427,7 +434,7 @@ function buildQ(q,num){
   q.opts.forEach(function(o,i){
     var id="o"+(uid++), key, txt, sub="";
     if(q.score){key=o[0]==="0"?"–":o[0];txt=o[1];sub=o[2]||"";}else{key="ABCDEF"[i]+".";txt=o[0];sub=o[1]||"";}
-    h+='<label class="opt"><input type="radio" name="'+q.id+'" id="'+id+'"><span class="key">'+key+'</span><span class="txt">'+esc(txt)+(sub?'<small>'+esc(sub)+'</small>':"")+'</span></label>';
+    h+='<label class="opt"><input type="radio" name="'+q.id+'" id="'+id+'" value="'+esc((q.codes&&q.codes[i])||(q.score?o[0]:String(i)))+'"><span class="key">'+key+'</span><span class="txt">'+esc(txt)+(sub?'<small>'+esc(sub)+'</small>':"")+'</span></label>';
   });
   return h+'</div></div>';
 }
@@ -619,7 +626,8 @@ function rerender(){
         var d=box.querySelector(".pdescs");if(d){var v=d.value.split("\n").map(function(x){return x.trim();}).filter(Boolean);p.descs=v;}
       }else{
         p.qs=[].map.call(box.querySelectorAll(".eq"),function(qb){
-          return {id:qb.dataset.id,title:qb.querySelector(".qt").value,opts:parse(qb.querySelector(".qo").value,1)};
+          var o={id:qb.dataset.id,title:qb.querySelector(".qt").value,opts:parse(qb.querySelector(".qo").value,1)};
+          var cs=qb.querySelector(".qc").value.split(",").map(function(x){return x.trim();}).filter(Boolean);if(cs.length)o.codes=cs;return o;
         }).filter(function(q){return q.title.trim()&&q.opts.length;});
       }
     });
@@ -638,9 +646,10 @@ function rerender(){
         else h+='<p style="font-size:13px;color:var(--muted)">Các đoạn mô tả lấy theo từng mẫu audio.</p>';
       }else{
         (p.qs||[]).forEach(function(q,k){
-          h+='<div class="eq" data-id="'+A(q.id)+'"><div class="top"><span>Câu '+(k+1)+'</span><button type="button" class="dng" data-del="'+i+'.'+k+'">Xoá câu</button></div>';
+          h+='<div class="eq" data-id="'+A(q.id)+'"><div class="top"><span>Câu '+(k+1)+' · trường <code>'+A(q.id)+'</code></span><button type="button" class="dng" data-del="'+i+'.'+k+'">Xoá câu</button></div>';
           h+='<label class="f">Câu hỏi</label><input class="qt" value="'+A(q.title)+'">';
-          h+='<label class="f">Đáp án</label><textarea class="qo" rows="'+Math.max(3,q.opts.length+1)+'">'+A(lines(q.opts,function(o){return o.join(" | ");}))+'</textarea></div>';
+          h+='<label class="f">Đáp án</label><textarea class="qo" rows="'+Math.max(3,q.opts.length+1)+'">'+A(lines(q.opts,function(o){return o.join(" | ");}))+'</textarea>';
+          h+='<label class="f">Mã đáp án để xuất dữ liệu (cách nhau dấu phẩy, đúng thứ tự dòng)</label><input class="qc" value="'+A((q.codes||[]).join(", "))+'"></div>';
         });
         h+='<div style="margin-top:10px"><button type="button" data-add="'+i+'">+ Thêm câu hỏi</button></div>';
       }
@@ -682,6 +691,19 @@ function rerender(){
   btn.addEventListener("click",open);
   document.addEventListener("keydown",function(e){if(e.key==="Escape")close();});
 })();
+
+/* ---- Xuất kết quả: mỗi trường là một mã, dễ ghép các phương diện ---- */
+document.getElementById("expbtn").addEventListener("click",function(){
+  var ans={},missing=[],n=0;
+  activePanels.forEach(function(p){p.qs.forEach(function(q){
+    var c=panelsEl.querySelector('input[name="'+q.id+'"]:checked');
+    if(c){ans[(p.id+"."+q.id)]=c.value;n++;}else missing.push(p.id+"."+q.id);
+  });});
+  var rec={sample_id:cur.id,audio:cur.src,tags:cur.tags,answered_at:new Date().toISOString(),answers:ans,missing:missing};
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(rec,null,1)],{type:"application/json"}));
+  a.download="mau_"+cur.id+".json";a.click();
+  document.getElementById("expmsg").textContent=missing.length?("Còn "+missing.length+" câu chưa trả lời."):("Đã tải "+n+" câu trả lời.");
+});
 </script>
 </body>
 </html>
