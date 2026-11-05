@@ -5,52 +5,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gán nhãn lượt nói</title>
 <style>
-/* Layout: ba cột. Trái: mẫu nghe. Giữa: waveform và câu hỏi. Phải: tài liệu hướng dẫn. */
+/* Layout: ba cột. Trái: mẫu nghe kèm tag. Giữa: waveform, tab phương diện, câu hỏi 2 cột. Phải: hướng dẫn cuộn riêng, kéo đổi độ rộng. */
 :root{
-  --bg:#ffffff; --panel:#ffffff; --ink:#1a1a1a; --muted:#5f6368; --line:#e3e5e8;
-  --accent:#1a73e8; --accent-soft:#e8f0fe; --wave:#c4c8cd; --font:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --bg:#ffffff; --ink:#1a1a1a; --muted:#5f6368; --line:#e3e5e8;
+  --accent:#1a73e8; --accent-soft:#e8f0fe; --wave:#c4c8cd; --rw:380px;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-:root{--rw:380px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55}
 header{padding:14px 20px;border-bottom:1px solid var(--line);font-weight:600;font-size:18px}
-.app{position:relative;display:grid;grid-template-columns:240px minmax(0,1fr) var(--rw);height:calc(100% - 53px)}
+.app{position:relative;display:grid;grid-template-columns:250px minmax(0,1fr) var(--rw);height:calc(100% - 53px)}
 .col{padding:20px;min-width:0;overflow-y:auto}
 .left{border-right:1px solid var(--line)}
 .right{border-left:1px solid var(--line);background:#fafafa}
-.grip{position:absolute;right:calc(var(--rw) - 4px);top:0;bottom:0;width:8px;cursor:col-resize;z-index:2;touch-action:none}
-.grip:hover,.grip.on,.grip:focus-visible{background:var(--accent-soft);outline:0;box-shadow:inset 2px 0 0 var(--accent)}
 h2{font-size:14px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
 h3{font-size:17px;margin:20px 0 6px}
-h3:first-of-type{margin-top:0}
+.doc h3:first-of-type{margin-top:0}
 p{margin:0 0 8px}
-.sample{display:block;width:100%;text-align:left;font:inherit;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;color:var(--ink)}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sample{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
 .sample:hover{border-color:#b9bec5}
 .sample[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
 .sample b{display:block;font-size:16px}
-.sample span{font-size:14px;color:var(--muted)}
-button:focus-visible,input:focus-visible+label,canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sample .sub{font-size:14px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:0 8px;color:var(--muted);background:#fff;line-height:20px}
 .player{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:10px;padding:14px}
 .pbtn{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:18px;cursor:pointer}
 .wavewrap{flex:1;min-width:0}
 canvas{display:block;width:100%;height:72px;cursor:pointer}
+canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .time{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
-.title{margin:0 0 10px;font-size:15px;color:var(--muted)}
-.q{margin-top:26px}
-.q h2{text-transform:none;font-size:17px;color:var(--ink);letter-spacing:0;margin-bottom:10px}
-.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
-.opts input{position:absolute;opacity:0;pointer-events:none}
-.opts label{display:block;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}
-.opts label:hover{border-color:#b9bec5}
-.opts input:checked+label{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
-.opts input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
-.opts{position:relative}
-.note{margin-top:22px;font-size:14px;color:var(--muted)}
+.title{margin:0 0 10px;font-size:15px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:4px;margin-top:22px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:8px 12px;cursor:pointer;color:var(--muted);white-space:nowrap;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+.tab .n{font-size:12px;color:var(--muted);margin-left:6px;font-weight:400}
+.panel{padding-top:18px}
+.panel .intro{font-size:15px;color:var(--muted);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:26px 32px}
+.q h4{margin:0 0 4px;font-size:16px;font-weight:600}
+.q .desc{margin:0 0 8px;font-size:15px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:5px 0;cursor:pointer}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.mark{flex:none;width:18px;height:18px;margin-top:3px;border:2px solid #9aa0a6;border-radius:50%;background:#fff}
+.opt input:checked+.mark{border-color:var(--accent);background:radial-gradient(circle,var(--accent) 0 4px,#fff 5px)}
+.opt input:focus-visible+.mark{outline:2px solid var(--accent);outline-offset:2px}
+.opt:hover .mark{border-color:var(--accent)}
+.opt .txt{font-size:16px}
+.opt .txt small{display:block;font-size:14px;color:var(--muted)}
+.note{margin-top:26px;font-size:14px;color:var(--muted)}
 .doc ul{margin:0 0 8px;padding-left:1.2em}
 .doc li{margin-bottom:4px}
-.doc .tag{font-weight:600}
 .doc hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+.doc table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:8px}
+.doc td,.doc th{border-top:1px solid var(--line);padding:5px 6px 5px 0;text-align:left;vertical-align:top}
+.grip{position:absolute;right:calc(var(--rw) - 4px);top:0;bottom:0;width:8px;cursor:col-resize;z-index:2;touch-action:none}
+.grip:hover,.grip.on,.grip:focus-visible{background:var(--accent-soft);outline:0;box-shadow:inset 2px 0 0 var(--accent)}
+.hide{display:none!important}
 @media (max-width:860px){
   .app{grid-template-columns:1fr;height:auto}
   .col{overflow:visible}
@@ -60,7 +74,7 @@ canvas{display:block;width:100%;height:72px;cursor:pointer}
 </style>
 </head>
 <body>
-<header>Gán nhãn lượt nói trong hội thoại</header>
+<header>Gán nhãn hội thoại và giọng nói</header>
 <div class="app">
   <aside class="col left" aria-label="Mẫu để nghe">
     <h2>Mẫu để nghe</h2>
@@ -74,79 +88,230 @@ canvas{display:block;width:100%;height:72px;cursor:pointer}
       <div class="wavewrap"><canvas id="wave" tabindex="0" aria-label="Sóng âm, bấm để tua"></canvas></div>
       <span class="time" id="time">0:00 / 0:00</span>
     </div>
-
-    <section class="q">
-      <h2>1. Ở cuối đoạn ghi âm, chuyện gì đang xảy ra?</h2>
-      <div class="opts" id="q1"></div>
-    </section>
-    <section class="q">
-      <h2>2. Cảm xúc của câu nói</h2>
-      <div class="opts" id="q2"></div>
-    </section>
-    <section class="q">
-      <h2>3. Kiểu trò chuyện</h2>
-      <div class="opts" id="q3"></div>
-    </section>
-    <p class="note">Đây là bản thử. Lựa chọn của bạn chỉ hiện trên trang này và chưa được gửi đi.</p>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Phương diện gán nhãn"></div>
+    <div id="panels"></div>
+    <p class="note">Đây là bản thử. Lựa chọn của bạn chỉ hiện trên trang này và chưa được gửi đi. Các đoạn mô tả trong phần chấm điểm là nội dung minh hoạ.</p>
   </main>
 
   <aside class="col right doc" id="doc" aria-label="Tài liệu hướng dẫn">
     <h2>Hướng dẫn</h2>
-    <h3>Việc cần làm</h3>
-    <ul>
-      <li><b>Nghe</b> đoạn âm thanh. Nghe lại nếu chưa chắc.</li>
-      <li>Chú ý kỹ <b>vài giây cuối cùng</b>.</li>
-      <li>Chọn <b>một</b> đáp án cho mỗi câu hỏi.</li>
-      <li>Không chắc thì chọn <b>Không rõ</b>. Đó là câu trả lời trung thực, không bị coi là sai.</li>
-    </ul>
-    <hr>
-    <h3>Câu 1. Năm lựa chọn</h3>
-    <p><span class="tag">Nói xong.</span> Người nói đã nói hết ý và chờ người kia đáp. Câu trọn nghĩa, giọng hạ xuống.</p>
-    <p><span class="tag">Ngừng giữa chừng.</span> Người nói chỉ nghỉ để nghĩ, sẽ nói tiếp. Câu bỏ lửng, hay có “ờ…”, “mà…”, “thì…”.</p>
-    <p><span class="tag">Tiếng đệm.</span> Người nghe chêm tiếng rất ngắn như “ừ”, “dạ”, “vâng”. Người nói chính vẫn nói tiếp.</p>
-    <p><span class="tag">Chen ngang.</span> Người kia nói cả câu để giành lời. Hai giọng đè lên nhau, người đang nói phải dừng.</p>
-    <p><span class="tag">Không rõ.</span> Nghe không ra, chỉ có tiếng ồn hoặc im lặng, hoặc nghe 2 lần vẫn phân vân.</p>
-    <h3>Chọn nhanh</h3>
-    <ul>
-      <li>Không nghe ra lời: <b>Không rõ</b>.</li>
-      <li>Có người chèn vào: 1 đến 2 tiếng nhỏ và người kia nói tiếp là <b>Tiếng đệm</b>. Nói cả câu và người kia phải dừng là <b>Chen ngang</b>.</li>
-      <li>Không ai chen: trọn ý là <b>Nói xong</b>, bỏ lửng là <b>Ngừng giữa chừng</b>.</li>
-    </ul>
-    <h3>Ba điều dễ nhầm</h3>
-    <ul>
-      <li>Im lặng lâu chưa chắc là nói xong. Hãy nghe ý.</li>
-      <li>“Dạ”, “vâng” mở đầu câu trả lời của chính người đó không phải tiếng đệm.</li>
-      <li>Tiếng cười, tiếng ho không tính. Chỉ nghe phần lời nói.</li>
-    </ul>
-    <hr>
-    <h3>Câu 2. Cảm xúc</h3>
-    <p>Chọn theo giọng của người nói ở cuối đoạn: <b>Vui</b> (giọng tươi, cười), <b>Buồn</b> (giọng trầm, chậm), <b>Tức giận</b> (giọng gắt, to), <b>Bình thường</b> (giọng đều, không nổi bật).</p>
-    <h3>Câu 3. Kiểu trò chuyện</h3>
-    <p><b>Kể chuyện:</b> một người kể, người kia nghe. <b>Phỏng vấn:</b> một người hỏi, một người trả lời. <b>Chia sẻ:</b> nói về cảm nghĩ, kinh nghiệm của mình. <b>Trò chuyện thường:</b> hai bên nói qua lại tự nhiên.</p>
+
+    <section data-for="all">
+      <h3>Việc cần làm</h3>
+      <ul>
+        <li><b>Nghe trọn vẹn</b> đoạn âm thanh, nghe lại nếu chưa chắc.</li>
+        <li>Chọn <b>một</b> đáp án cho mỗi câu hỏi.</li>
+        <li>Bám sát định nghĩa trong tài liệu. Không chắc thì đối chiếu lại.</li>
+      </ul>
+      <h3>Bỏ qua file ghi âm khi</h3>
+      <ul>
+        <li><b>Chất lượng âm thanh kém:</b> nhiễu nặng, rè hoặc mất tiếng, không nghe rõ lời.</li>
+        <li><b>Giọng không tự nhiên:</b> méo tiếng, biến đổi giọng, không phải giọng thu gốc.</li>
+      </ul>
+      <hr>
+    </section>
+
+    <section data-for="turn">
+      <h3>Lượt nói: năm lựa chọn</h3>
+      <p><b>Nói xong.</b> Người nói đã nói hết ý và chờ người kia đáp. Câu trọn nghĩa, giọng hạ xuống.</p>
+      <p><b>Ngừng giữa chừng.</b> Người nói chỉ nghỉ để nghĩ, sẽ nói tiếp. Câu bỏ lửng, hay có “ờ…”, “mà…”, “thì…”.</p>
+      <p><b>Tiếng đệm.</b> Người nghe chêm tiếng rất ngắn như “ừ”, “dạ”, “vâng”. Người nói chính vẫn nói tiếp.</p>
+      <p><b>Chen ngang.</b> Người kia nói cả câu để giành lời. Hai giọng đè lên nhau, người đang nói phải dừng.</p>
+      <p><b>Không rõ.</b> Nghe không ra, chỉ có tiếng ồn hoặc im lặng, hoặc nghe 2 lần vẫn phân vân.</p>
+      <h3>Chọn nhanh</h3>
+      <ul>
+        <li>Không nghe ra lời: <b>Không rõ</b>.</li>
+        <li>Có người chèn vào: 1 đến 2 tiếng nhỏ và người kia nói tiếp là <b>Tiếng đệm</b>. Nói cả câu và người kia phải dừng là <b>Chen ngang</b>.</li>
+        <li>Không ai chen: trọn ý là <b>Nói xong</b>, bỏ lửng là <b>Ngừng giữa chừng</b>.</li>
+      </ul>
+      <h3>Ba điều dễ nhầm</h3>
+      <ul>
+        <li>Im lặng lâu chưa chắc là nói xong. Hãy nghe ý.</li>
+        <li>“Dạ”, “vâng” mở đầu câu trả lời của chính người đó không phải tiếng đệm.</li>
+        <li>Tiếng cười, tiếng ho không tính. Chỉ nghe phần lời nói.</li>
+      </ul>
+      <h3>Cảm xúc và kiểu trò chuyện</h3>
+      <p><b>Vui</b> giọng tươi, cười. <b>Buồn</b> giọng trầm, chậm. <b>Tức giận</b> giọng gắt, to. <b>Bình thường</b> giọng đều.</p>
+      <p><b>Kể chuyện</b> một người kể, người kia nghe. <b>Phỏng vấn</b> một người hỏi, một người trả lời. <b>Chia sẻ</b> nói về cảm nghĩ, kinh nghiệm của mình. <b>Trò chuyện thường</b> hai bên nói qua lại tự nhiên.</p>
+    </section>
+
+    <section data-for="style">
+      <h3>Phong cách giao tiếp</h3>
+      <table>
+        <tr><th>Phong cách</th><th>Đặc điểm</th></tr>
+        <tr><td><b>Marketing – Quảng cáo</b></td><td>Giọng khỏe, cao độ tươi sáng, nhịp nhanh, nhấn nhá dứt khoát. Dùng cho TVC, quảng cáo số, giới thiệu sản phẩm.</td></tr>
+        <tr><td><b>Kể chuyện – Nội dung sáng tạo</b></td><td>Giọng trầm ấm, giàu cảm xúc, ngữ điệu linh hoạt. Dùng cho kể chuyện, thuyết minh, phim tài liệu, review, audiobook.</td></tr>
+        <tr><td><b>Hội thoại – Đời thường</b></td><td>Giọng tự nhiên, thả lỏng, gần gũi, không diễn xuất. Dùng cho giao tiếp hàng ngày.</td></tr>
+        <tr><td><b>Chính thống – Trang trọng – Phát biểu</b></td><td>Giọng trầm ổn, uy lực, phát âm rõ chữ, nhịp chững chạc. Dùng cho thời sự, sự kiện, thuyết trình, phát biểu.</td></tr>
+      </table>
+    </section>
+
+    <section data-for="content">
+      <h3>Chấm điểm: nội dung tiếng nói</h3>
+      <p>Chỉ xét ngữ nghĩa lời nói và ngữ cảnh hội thoại.</p>
+      <table>
+        <tr><td><b>5</b></td><td>Đúng 100% nội dung, tóm tắt được mục đích và ngữ cảnh.</td></tr>
+        <tr><td><b>4</b></td><td>Đúng nội dung chính, bỏ sót từ chi tiết phụ.</td></tr>
+        <tr><td><b>3</b></td><td>Đúng chủ đề chung, sai chi tiết quan trọng như con số, thời gian.</td></tr>
+        <tr><td><b>2</b></td><td>Thông tin rời rạc hoặc sai, dẫn đến hiểu sai ý người nói.</td></tr>
+        <tr><td><b>1</b></td><td>Hoàn toàn không trùng với lời trong file.</td></tr>
+      </table>
+    </section>
+
+    <section data-for="voice">
+      <h3>Chấm điểm: sắc thái và đặc tính giọng</h3>
+      <p>Xét con người và cách phát âm: giới tính, độ tuổi, số người, cảm xúc, âm lượng, tốc độ, giọng địa phương, trạng thái như khóc, cười, hụt hơi, thì thầm.</p>
+      <table>
+        <tr><td><b>5</b></td><td>Đúng tất cả: số người, giới tính, độ tuổi, cảm xúc, trạng thái vật lý tinh tế nhất.</td></tr>
+        <tr><td><b>4</b></td><td>Đúng đối tượng và cảm xúc chính, nhưng đặc tính giọng còn chung chung.</td></tr>
+        <tr><td><b>3</b></td><td>Đúng các đặc tính nhưng sai cảm xúc, hoặc sai nhiều đặc tính nhưng đúng cảm xúc.</td></tr>
+        <tr><td><b>2</b></td><td>Sai lệch đáng kể, ví dụ nhầm nam thành nữ, hoặc không nhận ra có 2 người nói.</td></tr>
+        <tr><td><b>1</b></td><td>Không mô tả hoặc sai mọi đặc tính về người và giọng nói.</td></tr>
+      </table>
+    </section>
+
+    <section data-for="env">
+      <h3>Chấm điểm: âm thanh môi trường</h3>
+      <p>Xét thành phần không phải lời nói và không gian vật lý.</p>
+      <table>
+        <tr><td><b>5</b></td><td>Liệt kê đủ các lớp âm nền và đúng địa điểm.</td></tr>
+        <tr><td><b>4</b></td><td>Đúng không gian chính, bỏ qua tiếng động ngắn hoặc tạp âm nhỏ.</td></tr>
+        <tr><td><b>3</b></td><td>Chung chung (ồn ào, yên tĩnh), không gọi tên nguồn âm.</td></tr>
+        <tr><td><b>2</b></td><td>Sai bối cảnh, ví dụ trong nhà nhưng mô tả ngoài trời.</td></tr>
+        <tr><td><b>1</b></td><td>Bỏ qua hoặc sai hoàn toàn các thành phần âm thanh môi trường.</td></tr>
+      </table>
+      <p>Nếu file không có âm thanh môi trường và mô tả cũng không nhắc đến, chọn <b>Không có âm thanh môi trường</b>.</p>
+    </section>
   </aside>
   <div class="grip" id="grip" role="separator" aria-orientation="vertical" aria-label="Kéo để đổi độ rộng phần hướng dẫn" tabindex="0"></div>
 </div>
 
 <script>
-var PEAKS = {"1": [0.062, 0.056, 0.053, 0.708, 0.775, 0.721, 0.776, 0.721, 0.246, 0.909, 0.722, 0.532, 0.698, 0.638, 0.974, 0.569, 0.358, 0.472, 0.717, 0.7, 0.749, 0.707, 0.145, 0.378, 0.436, 0.257, 0.244, 0.232, 0.535, 0.343, 0.21, 0.314, 0.39, 0.327, 0.427, 0.374, 0.362, 0.265, 0.227, 0.114, 0.418, 0.363, 0.286, 0.326, 0.417, 0.486, 0.35, 0.316, 0.221, 0.23, 0.213, 0.126, 0.266, 0.686, 0.433, 0.244, 0.305, 0.621, 0.482, 0.332, 0.808, 0.706, 0.555, 0.504, 0.165, 1.0, 0.892, 0.42, 0.449, 0.96, 0.743, 0.773, 0.632, 0.682, 0.899, 0.471, 0.727, 0.447, 0.291, 0.413, 0.362, 0.461, 0.781, 0.552, 0.329, 0.283, 0.249, 0.123, 0.057, 0.071], "2": [0.026, 0.142, 0.998, 0.621, 0.37, 0.687, 1.0, 0.885, 0.656, 0.69, 0.201, 0.607, 0.582, 0.806, 0.323, 0.76, 0.74, 0.536, 0.486, 0.361, 0.354, 0.511, 0.515, 0.435, 0.785, 0.618, 0.282, 0.877, 0.685, 0.724, 0.405, 0.455, 0.431, 0.16, 0.545, 0.184, 0.082, 0.452, 0.344, 0.484, 0.531, 0.333, 0.278, 0.1, 0.498, 0.522, 0.209, 0.069, 0.036, 0.159, 0.499, 0.414, 0.257, 0.29, 0.19, 0.124, 0.151, 0.338, 0.396, 0.237, 0.386, 0.283, 0.112, 0.341, 0.319, 0.425, 0.292, 0.141, 0.352, 0.148, 0.069, 0.486, 0.455, 0.345, 0.445, 0.259, 0.23, 0.292, 0.154, 0.306, 0.212, 0.207, 0.183, 0.243, 0.126, 0.048, 0.035, 0.038, 0.025, 0.038], "3": [0.26, 0.132, 0.374, 0.424, 0.383, 0.425, 0.386, 0.271, 0.399, 0.464, 0.855, 0.729, 0.713, 0.669, 0.272, 0.555, 0.454, 0.474, 0.586, 0.457, 0.35, 0.548, 0.514, 0.537, 0.853, 1.0, 0.637, 0.363, 0.265, 0.771, 0.879, 0.886, 0.75, 0.565, 0.556, 0.494, 0.314, 0.222, 0.651, 0.698, 0.704, 0.435, 0.156, 0.098, 0.089, 0.568, 0.542, 0.402, 0.595, 0.39, 0.492, 0.215, 0.203, 0.26, 0.089, 0.525, 0.456, 0.175, 0.506, 0.493, 0.188, 0.685, 0.598, 0.508, 0.612, 0.382, 0.589, 0.532, 0.61, 0.694, 0.291, 0.101, 0.314, 0.363, 0.172, 0.414, 0.505, 0.359, 0.223, 0.168, 0.22, 0.303, 0.2, 0.214, 0.211, 0.186, 0.289, 0.126, 0.05, 0.029], "4": [0.02, 0.021, 0.087, 0.141, 0.177, 0.218, 0.2, 0.197, 0.121, 0.103, 0.102, 0.117, 0.117, 0.111, 0.108, 0.091, 0.118, 0.093, 0.046, 0.084, 0.543, 0.442, 0.378, 0.258, 0.321, 0.335, 0.32, 0.342, 0.479, 0.313, 0.336, 0.37, 0.42, 0.246, 0.31, 0.156, 0.151, 0.135, 0.146, 0.109, 0.185, 0.146, 0.084, 0.082, 0.059, 0.08, 0.114, 0.098, 0.098, 0.214, 0.33, 0.216, 0.218, 0.136, 0.19, 0.189, 0.164, 0.161, 0.137, 0.104, 0.052, 0.06, 0.466, 0.332, 0.959, 0.858, 0.67, 0.807, 0.793, 1.0, 0.865, 0.827, 0.725, 0.455, 0.205, 0.143, 0.463, 0.537, 0.281, 0.339, 0.36, 0.468, 0.38, 0.188, 0.152, 0.468, 0.515, 0.3, 0.191, 0.091], "5": [0.262, 0.408, 0.333, 0.263, 0.214, 0.245, 0.265, 0.273, 0.318, 0.479, 0.367, 0.297, 0.293, 0.207, 0.269, 0.22, 0.27, 0.216, 0.288, 0.175, 0.18, 0.311, 0.294, 0.369, 0.256, 0.337, 0.302, 0.214, 0.241, 0.227, 0.296, 0.382, 0.338, 0.387, 0.394, 0.937, 0.487, 0.337, 0.393, 0.571, 0.368, 0.446, 0.3, 0.565, 0.355, 0.318, 0.637, 0.434, 0.435, 0.437, 0.382, 0.376, 0.331, 0.397, 0.274, 0.341, 0.394, 0.318, 0.373, 0.337, 0.386, 0.421, 0.262, 0.392, 0.47, 0.433, 0.44, 0.366, 0.282, 0.337, 0.263, 0.503, 0.366, 0.385, 0.417, 1.0, 0.452, 0.362, 0.438, 0.316, 0.372, 0.379, 0.407, 0.352, 0.434, 0.334, 0.329, 0.259, 0.244, 0.317]};
+var PEAKS = {"1": [0.062, 0.056, 0.053, 0.708, 0.775, 0.721, 0.776, 0.721, 0.246, 0.909, 0.722, 0.532, 0.698, 0.638, 0.974, 0.569, 0.358, 0.472, 0.717, 0.7, 0.749, 0.707, 0.145, 0.378, 0.436, 0.257, 0.244, 0.232, 0.535, 0.343, 0.21, 0.314, 0.39, 0.327, 0.427, 0.374, 0.362, 0.265, 0.227, 0.114, 0.418, 0.363, 0.286, 0.326, 0.417, 0.486, 0.35, 0.316, 0.221, 0.23, 0.213, 0.126, 0.266, 0.686, 0.433, 0.244, 0.305, 0.621, 0.482, 0.332, 0.808, 0.706, 0.555, 0.504, 0.165, 1.0, 0.892, 0.42, 0.449, 0.96, 0.743, 0.773, 0.632, 0.682, 0.899, 0.471, 0.727, 0.447, 0.291, 0.413, 0.362, 0.461, 0.781, 0.552, 0.329, 0.283, 0.249, 0.123, 0.057, 0.071], "2": [0.026, 0.142, 0.998, 0.621, 0.37, 0.687, 1.0, 0.885, 0.656, 0.69, 0.201, 0.607, 0.582, 0.806, 0.323, 0.76, 0.74, 0.536, 0.486, 0.361, 0.354, 0.511, 0.515, 0.435, 0.785, 0.618, 0.282, 0.877, 0.685, 0.724, 0.405, 0.455, 0.431, 0.16, 0.545, 0.184, 0.082, 0.452, 0.344, 0.484, 0.531, 0.333, 0.278, 0.1, 0.498, 0.522, 0.209, 0.069, 0.036, 0.159, 0.499, 0.414, 0.257, 0.29, 0.19, 0.124, 0.151, 0.338, 0.396, 0.237, 0.386, 0.283, 0.112, 0.341, 0.319, 0.425, 0.292, 0.141, 0.352, 0.148, 0.069, 0.486, 0.455, 0.345, 0.445, 0.259, 0.23, 0.292, 0.154, 0.306, 0.212, 0.207, 0.183, 0.243, 0.126, 0.048, 0.035, 0.038, 0.025, 0.038], "3": [0.26, 0.132, 0.374, 0.424, 0.383, 0.425, 0.386, 0.271, 0.399, 0.464, 0.855, 0.729, 0.713, 0.669, 0.272, 0.555, 0.454, 0.474, 0.586, 0.457, 0.35, 0.548, 0.514, 0.537, 0.853, 1.0, 0.637, 0.363, 0.265, 0.771, 0.879, 0.886, 0.75, 0.565, 0.556, 0.494, 0.314, 0.222, 0.651, 0.698, 0.704, 0.435, 0.156, 0.098, 0.089, 0.568, 0.542, 0.402, 0.595, 0.39, 0.492, 0.215, 0.203, 0.26, 0.089, 0.525, 0.456, 0.175, 0.506, 0.493, 0.188, 0.685, 0.598, 0.508, 0.612, 0.382, 0.589, 0.532, 0.61, 0.694, 0.291, 0.101, 0.314, 0.363, 0.172, 0.414, 0.505, 0.359, 0.223, 0.168, 0.22, 0.303, 0.2, 0.214, 0.211, 0.186, 0.289, 0.126, 0.05, 0.029], "4": [0.02, 0.021, 0.087, 0.141, 0.177, 0.218, 0.2, 0.197, 0.121, 0.103, 0.102, 0.117, 0.117, 0.111, 0.108, 0.091, 0.118, 0.093, 0.046, 0.084, 0.543, 0.442, 0.378, 0.258, 0.321, 0.335, 0.32, 0.342, 0.479, 0.313, 0.336, 0.37, 0.42, 0.246, 0.31, 0.156, 0.151, 0.135, 0.146, 0.109, 0.185, 0.146, 0.084, 0.082, 0.059, 0.08, 0.114, 0.098, 0.098, 0.214, 0.33, 0.216, 0.218, 0.136, 0.19, 0.189, 0.164, 0.161, 0.137, 0.104, 0.052, 0.06, 0.466, 0.332, 0.959, 0.858, 0.67, 0.807, 0.793, 1.0, 0.865, 0.827, 0.725, 0.455, 0.205, 0.143, 0.463, 0.537, 0.281, 0.339, 0.36, 0.468, 0.38, 0.188, 0.152, 0.468, 0.515, 0.3, 0.191, 0.091], "5": [0.262, 0.408, 0.333, 0.263, 0.214, 0.245, 0.265, 0.273, 0.318, 0.479, 0.367, 0.297, 0.293, 0.207, 0.269, 0.22, 0.27, 0.216, 0.288, 0.175, 0.18, 0.311, 0.294, 0.369, 0.256, 0.337, 0.302, 0.214, 0.241, 0.227, 0.296, 0.382, 0.338, 0.387, 0.394, 0.937, 0.487, 0.337, 0.393, 0.571, 0.368, 0.446, 0.3, 0.565, 0.355, 0.318, 0.637, 0.434, 0.435, 0.437, 0.382, 0.376, 0.331, 0.397, 0.274, 0.341, 0.394, 0.318, 0.373, 0.337, 0.386, 0.421, 0.262, 0.392, 0.47, 0.433, 0.44, 0.366, 0.282, 0.337, 0.263, 0.503, 0.366, 0.385, 0.417, 1.0, 0.452, 0.362, 0.438, 0.316, 0.372, 0.379, 0.407, 0.352, 0.434, 0.334, 0.329, 0.259, 0.244, 0.317], "6": [0.56, 0.507, 0.304, 0.148, 0.47, 0.994, 0.688, 0.715, 0.605, 0.546, 0.359, 0.504, 0.466, 0.259, 0.644, 0.663, 0.697, 0.639, 0.171, 0.068, 0.075, 0.121, 0.434, 0.316, 0.296, 0.238, 0.143, 0.167, 0.717, 0.647, 0.496, 0.692, 0.887, 0.926, 0.703, 0.665, 0.629, 1.0, 0.888, 0.7, 0.631, 0.674, 0.651, 0.652, 0.419, 0.483, 0.597, 0.424, 0.068, 0.077, 0.059, 0.453, 0.839, 0.963, 0.576, 0.908, 0.66, 0.561, 0.65, 0.545, 0.427, 0.378, 0.511, 0.462, 0.424, 0.617, 0.486, 0.518, 0.579, 0.524, 0.665, 0.826, 0.822, 0.508, 0.492, 0.427, 0.551, 0.485, 0.407, 0.447, 0.263, 0.063, 0.318, 0.425, 0.218, 0.525, 0.518, 0.595, 0.576, 0.17]};
+
+/* ---- Dữ liệu ---- */
 var SAMPLES = [
-  {n:1,label:"Nói xong",src:"audio/vi_du_1.mp3"},
-  {n:2,label:"Ngừng giữa chừng",src:"audio/vi_du_2.mp3"},
-  {n:3,label:"Tiếng đệm",src:"audio/vi_du_3.mp3"},
-  {n:4,label:"Chen ngang",src:"audio/vi_du_4.mp3"},
-  {n:5,label:"Không rõ",src:"audio/vi_du_5.mp3"}
+  {n:1,label:"Nói xong",src:"audio/vi_du_1.mp3",tags:["turntaking"]},
+  {n:2,label:"Ngừng giữa chừng",src:"audio/vi_du_2.mp3",tags:["turntaking"]},
+  {n:3,label:"Tiếng đệm",src:"audio/vi_du_3.mp3",tags:["turntaking"]},
+  {n:4,label:"Chen ngang",src:"audio/vi_du_4.mp3",tags:["turntaking"]},
+  {n:5,label:"Không rõ",src:"audio/vi_du_5.mp3",tags:["turntaking"]},
+  {n:6,label:"Chấm điểm mô tả",src:"audio/vi_du_6.mp3",tags:["slm"]}
 ];
-var Q1=["Nói xong","Ngừng giữa chừng","Tiếng đệm","Chen ngang","Không rõ"];
-var Q2=["Vui","Buồn","Bình thường","Tức giận"];
-var Q3=["Kể chuyện","Phỏng vấn","Chia sẻ","Trò chuyện thường"];
 
-function opts(id,name,list){
-  var el=document.getElementById(id),h="";
-  list.forEach(function(t,i){var k=name+i;h+='<input type="radio" name="'+name+'" id="'+k+'"><label for="'+k+'">'+t+'</label>';});
-  el.innerHTML=h;
+var SCALE_CONTENT=[
+  ["5","Đúng 100% nội dung, nêu được mục đích và ngữ cảnh"],
+  ["4","Đúng nội dung chính, thiếu chi tiết phụ"],
+  ["3","Đúng chủ đề chung, sai chi tiết quan trọng"],
+  ["2","Rời rạc hoặc sai, dẫn đến hiểu sai ý"],
+  ["1","Hoàn toàn không khớp"]
+];
+var SCALE_VOICE=[
+  ["5","Đúng tất cả: số người, giới tính, độ tuổi, cảm xúc, trạng thái"],
+  ["4","Đúng đối tượng và cảm xúc chính, đặc tính giọng còn chung chung"],
+  ["3","Đúng đặc tính nhưng sai cảm xúc, hoặc ngược lại"],
+  ["2","Sai lệch đáng kể (nhầm giới tính, thiếu người nói)"],
+  ["1","Sai mọi đặc tính về người và giọng nói"]
+];
+var SCALE_ENV=[
+  ["5","Đủ các lớp âm nền và đúng địa điểm"],
+  ["4","Đúng không gian chính, bỏ sót tiếng nhỏ"],
+  ["3","Chung chung, không gọi tên nguồn âm"],
+  ["2","Sai bối cảnh"],
+  ["1","Bỏ qua hoặc sai hoàn toàn"],
+  ["0","Không có âm thanh môi trường","File và mô tả đều không nhắc đến"]
+];
+function scoreQs(prefix,scale,descs){
+  return descs.map(function(d,i){return {id:prefix+i,score:true,title:"Đoạn mô tả "+"ABCD"[i],desc:d,opts:scale};});
 }
-opts("q1","q1",Q1);opts("q2","q2",Q2);opts("q3","q3",Q3);
 
+/* Mỗi tag quyết định các phương diện (panel) hiện ra */
+var PANELS = {
+  turntaking:[
+    {id:"turn",name:"Lượt nói",intro:"Nghe kỹ vài giây cuối của đoạn ghi âm.",qs:[
+      {id:"t1",title:"1. Ở cuối đoạn, chuyện gì đang xảy ra?",opts:[["Nói xong"],["Ngừng giữa chừng"],["Tiếng đệm"],["Chen ngang"],["Không rõ"]]},
+      {id:"t2",title:"2. Cảm xúc của câu nói",opts:[["Vui"],["Buồn"],["Bình thường"],["Tức giận"]]},
+      {id:"t3",title:"3. Kiểu trò chuyện",opts:[["Kể chuyện"],["Phỏng vấn"],["Chia sẻ"],["Trò chuyện thường"]]}
+    ]}
+  ],
+  slm:[
+    {id:"style",name:"Phong cách",intro:"Chọn phong cách giao tiếp của người nói.",qs:[
+      {id:"s1",title:"1. Phong cách giao tiếp",opts:[
+        ["Marketing – Quảng cáo","Khỏe, tươi sáng, nhịp nhanh, nhấn dứt khoát"],
+        ["Kể chuyện – Nội dung sáng tạo","Trầm ấm, giàu cảm xúc, ngữ điệu linh hoạt"],
+        ["Hội thoại – Đời thường","Tự nhiên, thả lỏng, gần gũi"],
+        ["Chính thống – Trang trọng – Phát biểu","Trầm ổn, uy lực, rõ chữ"]]},
+      {id:"s2",title:"2. Có nên bỏ qua file này không?",opts:[
+        ["Không, file dùng được"],
+        ["Bỏ qua: chất lượng âm thanh kém","Nhiễu nặng, rè hoặc mất tiếng"],
+        ["Bỏ qua: giọng không tự nhiên","Méo tiếng, biến đổi giọng"]]},
+      {id:"s3",title:"3. Bạn chắc chắn đến đâu?",opts:[["Chắc chắn"],["Hơi phân vân"],["Không chắc"]]}
+    ]},
+    {id:"content",name:"Nội dung",intro:"Chấm điểm mức độ phù hợp của từng đoạn mô tả về nội dung lời nói.",
+     qs:scoreQs("c",SCALE_CONTENT,[
+      "Một người kể rằng giai đoạn đầu rất vất vả, liên quan đến tinh thần, sức khỏe và tài chính, nhưng nhờ ý chí và nỗ lực nên đã vượt qua.",
+      "Một người nói rằng thời gian đầu rất vất vả và đã cố gắng để vượt qua.",
+      "Một người nói về chuyện chi phí đi học và đã quyết định bỏ giữa chừng.",
+      "Hai người đang bàn về kế hoạch đi du lịch cuối tuần."])},
+    {id:"voice",name:"Sắc thái giọng",intro:"Chấm điểm mô tả về người nói: giới tính, độ tuổi, số người, cảm xúc, cách nói.",
+     qs:scoreQs("v",SCALE_VOICE,[
+      "Một giọng nói, người nói trẻ tuổi, tốc độ vừa phải, giọng đều và hơi nhấn khi nói về khó khăn, mang sắc thái tâm sự, cố gắng.",
+      "Một người đang nói chuyện bình thường.",
+      "Hai người đang tranh cãi với giọng gắt và to tiếng.",
+      "Tiếng một người đang cười lớn và hát."])},
+    {id:"env",name:"Âm thanh môi trường",intro:"Chấm điểm mô tả về tiếng nền và không gian. Nếu file không có tiếng nền, chọn mục cuối.",
+     qs:scoreQs("e",SCALE_ENV,[
+      "Không gian trong nhà yên tĩnh, chỉ nghe tiếng người nói, có tạp âm rất nhẹ của thiết bị thu.",
+      "Trong nhà, hơi vang, có tạp âm nhẹ.",
+      "Nơi rất ồn ào với tiếng xe cộ và tiếng nhạc.",
+      "Ngoài trời lúc mưa to, có tiếng sấm."])}
+  ]
+};
+var SECTION_FOR={turn:"turn",style:"style",content:"content",voice:"voice",env:"env"};
+
+/* ---- Dựng giao diện câu hỏi ---- */
+var tabsEl=document.getElementById("tabs"), panelsEl=document.getElementById("panels");
+var activePanels=[], activeId=null, uid=0;
+panelsEl.addEventListener("change",updCounts);
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function buildQ(q){
+  var h='<div class="q"><h4>'+esc(q.title)+'</h4>';
+  if(q.desc)h+='<p class="desc">'+esc(q.desc)+'</p>';
+  q.opts.forEach(function(o,i){
+    var id="o"+(uid++), pre="", txt, sub="";
+    if(q.score){pre='<b>'+(o[0]==="0"?"–":o[0])+'</b> ';txt=o[1];sub=o[2]||"";}else{txt=o[0];sub=o[1]||"";}
+    h+='<label class="opt"><input type="radio" name="'+q.id+'" id="'+id+'"><span class="mark" aria-hidden="true"></span><span class="txt">'+pre+esc(txt)+(sub?'<small>'+esc(sub)+'</small>':"")+'</span></label>';
+  });
+  return h+'</div>';
+}
+function answered(p){var n=0;p.qs.forEach(function(q){if(panelsEl.querySelector('input[name="'+q.id+'"]:checked'))n++;});return n;}
+function updCounts(){activePanels.forEach(function(p){var el=document.getElementById("cnt-"+p.id);if(el)el.textContent=answered(p)+"/"+p.qs.length;});}
+function showPanel(id){
+  activeId=id;
+  activePanels.forEach(function(p){
+    document.getElementById("pn-"+p.id).classList.toggle("hide",p.id!==id);
+    document.getElementById("tb-"+p.id).setAttribute("aria-selected",p.id===id?"true":"false");
+  });
+  document.querySelectorAll("#doc section").forEach(function(s){
+    var f=s.dataset.for;s.classList.toggle("hide",!(f==="all"||f===id));
+  });
+}
+function buildPanels(tags){
+  activePanels=[];tabsEl.innerHTML="";panelsEl.innerHTML="";
+  tags.forEach(function(t){(PANELS[t]||[]).forEach(function(p){activePanels.push(p);});});
+  activePanels.forEach(function(p){
+    var b=document.createElement("button");b.type="button";b.className="tab";b.id="tb-"+p.id;b.setAttribute("role","tab");
+    b.innerHTML=esc(p.name)+'<span class="n" id="cnt-'+p.id+'"></span>';
+    b.addEventListener("click",function(){showPanel(p.id);});
+    tabsEl.appendChild(b);
+    var d=document.createElement("section");d.className="panel";d.id="pn-"+p.id;d.setAttribute("role","tabpanel");
+    d.innerHTML='<p class="intro">'+esc(p.intro)+'</p><div class="grid">'+p.qs.map(buildQ).join("")+'</div>';
+    panelsEl.appendChild(d);
+  });
+  showPanel(activePanels[0].id);updCounts();
+}
+
+/* ---- Trình phát waveform ---- */
 var cur=null, audio=null, canvas=document.getElementById("wave"), ctx=canvas.getContext("2d");
 var pbtn=document.getElementById("pbtn"), timeEl=document.getElementById("time"), ptitle=document.getElementById("ptitle");
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
@@ -162,27 +327,27 @@ function draw(){
   }
 }
 function updTime(){timeEl.textContent=fmt(audio.currentTime)+" / "+fmt(audio.duration);}
-function resetAnswers(){document.querySelectorAll('.opts input').forEach(function(i){i.checked=false;});}
+function setPlayIcon(playing){pbtn.textContent=playing?"❚❚":"▶";pbtn.setAttribute("aria-label",playing?"Tạm dừng":"Phát");}
 function load(s){
   if(audio){audio.pause();}
   cur=s;audio=new Audio(s.src);
   audio.addEventListener("loadedmetadata",function(){updTime();draw();});
   audio.addEventListener("timeupdate",function(){updTime();draw();});
-  audio.addEventListener("ended",function(){pbtn.textContent="▶";pbtn.setAttribute("aria-label","Phát");draw();});
-  pbtn.textContent="▶";pbtn.setAttribute("aria-label","Phát");
-  ptitle.textContent="Đoạn nghe: ví dụ "+s.n+" ("+s.label+")";
+  audio.addEventListener("ended",function(){setPlayIcon(false);draw();});
+  setPlayIcon(false);
+  ptitle.innerHTML="Đang nghe: mẫu "+s.n+" "+s.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("");
   document.querySelectorAll(".sample").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.n==s.n?"true":"false");});
-  timeEl.textContent="0:00 / 0:00";draw();
+  timeEl.textContent="0:00 / 0:00";
+  buildPanels(s.tags);draw();
 }
 function toggle(){
   try{
-    if(audio.paused){var pr=audio.play();if(pr&&pr.catch)pr.catch(function(){});pbtn.textContent="❚❚";pbtn.setAttribute("aria-label","Tạm dừng");}
-    else{audio.pause();pbtn.textContent="▶";pbtn.setAttribute("aria-label","Phát");}
+    if(audio.paused){var pr=audio.play();if(pr&&pr.catch)pr.catch(function(){});setPlayIcon(true);}
+    else{audio.pause();setPlayIcon(false);}
   }catch(e){}
 }
 pbtn.addEventListener("click",toggle);
-function seek(x){var r=canvas.getBoundingClientRect();if(audio.duration){audio.currentTime=Math.min(1,Math.max(0,(x-r.left)/r.width))*audio.duration;}}
-canvas.addEventListener("click",function(e){seek(e.clientX);});
+canvas.addEventListener("click",function(e){var r=canvas.getBoundingClientRect();if(audio.duration)audio.currentTime=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width))*audio.duration;});
 canvas.addEventListener("keydown",function(e){
   if(e.key===" "||e.key==="Enter"){e.preventDefault();toggle();}
   if(e.key==="ArrowLeft"){audio.currentTime=Math.max(0,audio.currentTime-1);}
@@ -193,13 +358,13 @@ window.addEventListener("resize",function(){if(cur)draw();});
 var box=document.getElementById("samples");
 SAMPLES.forEach(function(s){
   var b=document.createElement("button");b.type="button";b.className="sample";b.dataset.n=s.n;b.setAttribute("aria-pressed","false");
-  b.innerHTML="<b>Ví dụ "+s.n+"</b><span>"+s.label+"</span>";
-  b.addEventListener("click",function(){load(s);resetAnswers();});
+  b.innerHTML="<b>Mẫu "+s.n+"</b><span class=\"sub\">"+esc(s.label)+"</span><div class=\"tags\">"+s.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("")+"</div>";
+  b.addEventListener("click",function(){load(s);});
   box.appendChild(b);
 });
 load(SAMPLES[0]);
 
-// Đổi độ rộng phần hướng dẫn
+/* ---- Đổi độ rộng phần hướng dẫn ---- */
 (function(){
   var grip=document.getElementById("grip"),root=document.documentElement,MIN=260,MAX=720;
   function set(w){w=Math.min(MAX,Math.max(MIN,Math.round(w)));root.style.setProperty("--rw",w+"px");try{localStorage.setItem("rw",w);}catch(e){}return w;}
