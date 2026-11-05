@@ -70,6 +70,8 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .doc td,.doc th{border-top:1px solid var(--line);padding:5px 6px 5px 0;text-align:left;vertical-align:top}
 .grip{position:absolute;right:calc(var(--rw) - 4px);top:0;bottom:0;width:8px;cursor:col-resize;z-index:2;touch-action:none}
 .grip:hover,.grip.on,.grip:focus-visible{background:var(--accent-soft);outline:0;box-shadow:inset 2px 0 0 var(--accent)}
+.dplay{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:0 10px;height:26px;border:1px solid var(--accent);border-radius:999px;background:#fff;color:var(--accent);font-size:14px;cursor:pointer;vertical-align:baseline}
+.dplay:hover,.dplay.on{background:var(--accent);color:#fff}
 .hide{display:none!important}
 @media (max-width:860px){
   .app{grid-template-columns:1fr;height:auto}
@@ -119,11 +121,11 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
     <section data-for="tcontent">
       <h3>Các tình huống lượt nói</h3>
-      <p><b>Nói xong.</b> Người nói đã nói hết ý và chờ người kia đáp. Câu trọn nghĩa, giọng hạ xuống.</p>
-      <p><b>Ngừng giữa chừng.</b> Người nói chỉ nghỉ để nghĩ, sẽ nói tiếp. Câu bỏ lửng, hay có “ờ…”, “mà…”, “thì…”.</p>
-      <p><b>Tiếng đệm.</b> Người nghe chêm tiếng rất ngắn như “ừ”, “dạ”, “vâng”. Người nói chính vẫn nói tiếp.</p>
-      <p><b>Chen ngang.</b> Người kia nói cả câu để giành lời. Hai giọng đè lên nhau, người đang nói phải dừng.</p>
-      <p><b>Không rõ.</b> Nghe không ra, chỉ có tiếng ồn hoặc im lặng, hoặc nghe 2 lần vẫn phân vân.</p>
+      <p><b>Nói xong.</b> Người nói đã nói hết ý và chờ người kia đáp. Câu trọn nghĩa, giọng hạ xuống. <button class="dplay" type="button" data-audio="audio/vi_du_1.mp3">▶ Nghe ví dụ</button></p>
+      <p><b>Ngừng giữa chừng.</b> Người nói chỉ nghỉ để nghĩ, sẽ nói tiếp. Câu bỏ lửng, hay có “ờ…”, “mà…”, “thì…”. <button class="dplay" type="button" data-audio="audio/vi_du_2.mp3">▶ Nghe ví dụ</button></p>
+      <p><b>Tiếng đệm.</b> Người nghe chêm tiếng rất ngắn như “ừ”, “dạ”, “vâng”. Người nói chính vẫn nói tiếp. <button class="dplay" type="button" data-audio="audio/vi_du_3.mp3">▶ Nghe ví dụ</button></p>
+      <p><b>Chen ngang.</b> Người kia nói cả câu để giành lời. Hai giọng đè lên nhau, người đang nói phải dừng. <button class="dplay" type="button" data-audio="audio/vi_du_4.mp3">▶ Nghe ví dụ</button></p>
+      <p><b>Không rõ.</b> Nghe không ra, chỉ có tiếng ồn hoặc im lặng, hoặc nghe 2 lần vẫn phân vân. <button class="dplay" type="button" data-audio="audio/vi_du_5.mp3">▶ Nghe ví dụ</button></p>
       <h3>Chọn nhanh</h3>
       <ul>
         <li>Không nghe ra lời: <b>Không rõ</b>.</li>
@@ -150,15 +152,15 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     </section>
     <section data-for="tvoice">
       <h3>Sắc thái giọng</h3>
-      <p><b>Giọng ở cuối câu:</b> hạ xuống thường là nói xong. Lơ lửng thường là còn nói tiếp. Lên cao thường là đang hỏi.</p>
+      <p><b>Giọng ở cuối câu:</b> hạ xuống thường là nói xong <button class="dplay" type="button" data-audio="audio/vi_du_1.mp3">▶ Nghe ví dụ</button>. Lơ lửng thường là còn nói tiếp <button class="dplay" type="button" data-audio="audio/vi_du_2.mp3">▶ Nghe ví dụ</button>. Lên cao thường là đang hỏi.</p>
       <p><b>Vui</b> giọng tươi, có tiếng cười. <b>Buồn</b> giọng trầm, chậm. <b>Tức giận</b> giọng gắt, to. <b>Bình thường</b> giọng đều, không nổi bật.</p>
     </section>
     <section data-for="tenv">
       <h3>Âm thanh ngoài lời nói chính</h3>
       <ul>
-        <li><b>Tiếng đệm</b> là tiếng rất ngắn như “ừ”, “dạ”, “vâng” người nghe chêm vào, người nói chính vẫn nói tiếp.</li>
-        <li><b>Nói cùng lúc</b> là hai giọng đè lên nhau ở cuối đoạn.</li>
-        <li><b>Khoảng lặng</b> là đoạn im lặng ngay trước chỗ ghi âm dừng.</li>
+        <li><b>Tiếng đệm</b> là tiếng rất ngắn như “ừ”, “dạ”, “vâng” người nghe chêm vào, người nói chính vẫn nói tiếp. <button class="dplay" type="button" data-audio="audio/vi_du_3.mp3">▶ Nghe ví dụ</button></li>
+        <li><b>Nói cùng lúc</b> là hai giọng đè lên nhau ở cuối đoạn. <button class="dplay" type="button" data-audio="audio/vi_du_4.mp3">▶ Nghe ví dụ</button></li>
+        <li><b>Khoảng lặng</b> là đoạn im lặng ngay trước chỗ ghi âm dừng. <button class="dplay" type="button" data-audio="audio/vi_du_5.mp3">▶ Nghe ví dụ</button></li>
         <li>Tiếng cười, tiếng ho không tính là lời nói.</li>
       </ul>
     </section>
@@ -359,6 +361,7 @@ function answered(p){var n=0;p.qs.forEach(function(q){if(panelsEl.querySelector(
 function updCounts(){activePanels.forEach(function(p){var el=document.getElementById("cnt-"+p.id);if(el)el.textContent=answered(p)+"/"+p.qs.length;});}
 function showPanel(id){
   activeId=id;
+  resetScroll();
   activePanels.forEach(function(p){
     document.getElementById("pn-"+p.id).classList.toggle("hide",p.id!==id);
     document.getElementById("tb-"+p.id).setAttribute("aria-selected",p.id===id?"true":"false");
@@ -405,7 +408,9 @@ function draw(){
 }
 function updTime(){timeEl.textContent=fmt(audio.currentTime)+" / "+fmt(audio.duration);}
 function setPlayIcon(playing){pbtn.textContent=playing?"❚❚":"▶";pbtn.setAttribute("aria-label",playing?"Tạm dừng":"Phát");}
+function resetScroll(){var m=document.querySelector(".mid"),d=document.getElementById("doc");if(m)m.scrollTop=0;if(d)d.scrollTop=0;}
 function load(s){
+  if(typeof stopDoc==="function")stopDoc();
   if(audio){audio.pause();}
   cur=s;audio=new Audio(s.src);
   audio.addEventListener("loadedmetadata",function(){updTime();draw();});
@@ -415,9 +420,12 @@ function load(s){
   ptitle.innerHTML="Đang nghe: mẫu "+(SAMPLES.indexOf(s)+1)+" "+s.tags.map(function(t){return '<span class="tag">'+esc(t)+'</span>';}).join("");
   document.querySelectorAll(".sample").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.n==s.id?"true":"false");});
   timeEl.textContent="0:00 / 0:00";
-  buildPanels(s);draw();
+  buildPanels(s);resetScroll();draw();
 }
+function stopDoc(){if(dAudio){dAudio.pause();}if(dBtn){dBtn.textContent="▶ Nghe ví dụ";dBtn.classList.remove("on");}}
+var dAudio=null,dBtn=null;
 function toggle(){
+  stopDoc();
   try{
     if(audio.paused){var pr=audio.play();if(pr&&pr.catch)pr.catch(function(){});setPlayIcon(true);}
     else{audio.pause();setPlayIcon(false);}
@@ -433,6 +441,17 @@ canvas.addEventListener("keydown",function(e){
 window.addEventListener("resize",function(){if(cur)draw();});
 if(window.ResizeObserver){new ResizeObserver(function(){if(cur)draw();}).observe(document.querySelector(".wavewrap"));}
 
+document.getElementById("doc").addEventListener("click",function(e){
+  var b=e.target.closest(".dplay");if(!b)return;
+  try{
+    if(audio&&!audio.paused){audio.pause();setPlayIcon(false);}
+    if(dAudio&&dBtn===b&&!dAudio.paused){stopDoc();return;}
+    stopDoc();
+    dAudio=new Audio(b.getAttribute("data-audio"));dBtn=b;b.textContent="■ Dừng";b.classList.add("on");
+    dAudio.addEventListener("ended",stopDoc);
+    var pr=dAudio.play();if(pr&&pr.catch)pr.catch(function(){stopDoc();});
+  }catch(x){stopDoc();}
+});
 var box=document.getElementById("samples");
 SAMPLES.forEach(function(s,ix){
   var b=document.createElement("button");b.type="button";b.className="sample";b.dataset.n=s.id;b.setAttribute("aria-pressed","false");
