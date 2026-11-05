@@ -117,7 +117,7 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <hr>
     </section>
 
-    <section data-for="eot pause bc int">
+    <section data-for="tcontent">
       <h3>Các tình huống lượt nói</h3>
       <p><b>Nói xong.</b> Người nói đã nói hết ý và chờ người kia đáp. Câu trọn nghĩa, giọng hạ xuống.</p>
       <p><b>Ngừng giữa chừng.</b> Người nói chỉ nghỉ để nghĩ, sẽ nói tiếp. Câu bỏ lửng, hay có “ờ…”, “mà…”, “thì…”.</p>
@@ -142,21 +142,25 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 
 
-    <section data-for="eot">
-      <h3>Dấu hiệu nói xong</h3>
-      <ul><li>Câu trọn nghĩa, không thiếu ý.</li><li>Giọng hạ xuống ở cuối câu, hoặc vừa hỏi xong và chờ người kia đáp.</li></ul>
+
+    <section data-for="tstyle">
+      <h3>Phong cách trò chuyện</h3>
+      <p><b>Kể chuyện:</b> một người kể, người kia nghe. <b>Phỏng vấn:</b> một người hỏi, một người trả lời. <b>Chia sẻ:</b> nói về cảm nghĩ, kinh nghiệm của mình. <b>Trò chuyện thường:</b> hai bên nói qua lại tự nhiên.</p>
+      <p>Nhịp độ chọn theo cảm nhận: <b>chậm rãi</b> có nhiều khoảng nghỉ, <b>dồn dập</b> nói liên tục, ít nghỉ.</p>
     </section>
-    <section data-for="pause">
-      <h3>Dấu hiệu chỉ tạm nghỉ</h3>
-      <ul><li>Câu bỏ lửng, hay có “ờ…”, “mà…”, “thì…”.</li><li>Giọng không hạ xuống. Im lặng lâu hay ngắn không quan trọng, miễn ý còn dở.</li></ul>
+    <section data-for="tvoice">
+      <h3>Sắc thái giọng</h3>
+      <p><b>Giọng ở cuối câu:</b> hạ xuống thường là nói xong. Lơ lửng thường là còn nói tiếp. Lên cao thường là đang hỏi.</p>
+      <p><b>Vui</b> giọng tươi, có tiếng cười. <b>Buồn</b> giọng trầm, chậm. <b>Tức giận</b> giọng gắt, to. <b>Bình thường</b> giọng đều, không nổi bật.</p>
     </section>
-    <section data-for="bc">
-      <h3>Dấu hiệu tiếng đệm</h3>
-      <ul><li>Rất ngắn, 1 đến 2 tiếng, giọng nhỏ, nhẹ.</li><li>Người nói chính vẫn nói tiếp, không phải dừng lại.</li></ul>
-    </section>
-    <section data-for="int">
-      <h3>Dấu hiệu chen ngang</h3>
-      <ul><li>Người xen vào nói cả một câu hay một ý, không chỉ “ừ”, “dạ”.</li><li>Hai giọng đè lên nhau, hoặc người đang nói bị cắt giữa câu.</li></ul>
+    <section data-for="tenv">
+      <h3>Âm thanh ngoài lời nói chính</h3>
+      <ul>
+        <li><b>Tiếng đệm</b> là tiếng rất ngắn như “ừ”, “dạ”, “vâng” người nghe chêm vào, người nói chính vẫn nói tiếp.</li>
+        <li><b>Nói cùng lúc</b> là hai giọng đè lên nhau ở cuối đoạn.</li>
+        <li><b>Khoảng lặng</b> là đoạn im lặng ngay trước chỗ ghi âm dừng.</li>
+        <li>Tiếng cười, tiếng ho không tính là lời nói.</li>
+      </ul>
     </section>
 
     <section data-for="style">
@@ -278,29 +282,29 @@ function scoreQs(prefix,scale,descs){
 /* Mỗi tag quyết định các phương diện (panel) hiện ra */
 var PANELS = {
   turntaking:[
-    {id:"eot",name:"Nói xong",intro:"Nghe kỹ vài giây cuối. Người nói đã kết thúc lượt của mình chưa?",qs:[
-      {id:"a1",title:"Ở cuối đoạn, người nói đã nói xong ý của mình chưa?",opts:[["Đã nói xong"],["Chưa xong"],["Không rõ"]]},
-      {id:"a2",title:"Câu cuối cùng có trọn nghĩa không?",opts:[["Trọn nghĩa"],["Bỏ lửng"],["Không rõ"]]},
-      {id:"a3",title:"Giọng ở cuối câu thế nào?",opts:[["Hạ xuống"],["Giữ nguyên, lơ lửng"],["Lên cao như câu hỏi"]]},
-      {id:"a4",title:"Người kia có nên trả lời ngay lúc này không?",opts:[["Có"],["Chưa nên"],["Không rõ"]]}
+    {id:"tstyle",name:"Phong cách",intro:"Nhận xét về cách hai người trò chuyện trong cả đoạn.",qs:[
+      {id:"s1",title:"Cuộc trò chuyện thuộc kiểu nào?",opts:[["Kể chuyện"],["Phỏng vấn"],["Chia sẻ"],["Trò chuyện thường"]]},
+      {id:"s2",title:"Nhịp độ cuộc trò chuyện thế nào?",opts:[["Chậm rãi"],["Bình thường"],["Dồn dập"]]},
+      {id:"s3",title:"Người nói có hay ngập ngừng (ờ, ừm, mà…) không?",opts:[["Không"],["Thỉnh thoảng"],["Rất nhiều"]]},
+      {id:"s4",title:"Hai người có hay ngắt lời nhau không?",opts:[["Không"],["Thỉnh thoảng"],["Thường xuyên"]]}
     ]},
-    {id:"pause",name:"Ngừng giữa chừng",intro:"Người nói chỉ tạm nghỉ hay đã dừng hẳn?",qs:[
-      {id:"p1",title:"Ở cuối đoạn, người nói có đang tạm dừng không?",opts:[["Có"],["Không"],["Không rõ"]]},
-      {id:"p2",title:"Vì sao người nói dừng?",opts:[["Để nghĩ hoặc nhớ lại"],["Để lấy hơi"],["Ngập ngừng, tìm từ"],["Không phải đang dừng"]]},
-      {id:"p3",title:"Khoảng dừng kéo dài bao lâu?",opts:[["Dưới 1 giây"],["Khoảng 1 đến 2 giây"],["Hơn 2 giây"]]},
-      {id:"p4",title:"Người nói có còn định nói tiếp không?",opts:[["Có"],["Không"],["Không rõ"]]}
+    {id:"tcontent",name:"Nội dung",intro:"Nghe kỹ vài giây cuối. Lời nói ở đó đang đi đến đâu?",qs:[
+      {id:"c1",title:"Ở cuối đoạn ghi âm, chuyện gì đang xảy ra?",opts:[["Nói xong"],["Ngừng giữa chừng"],["Tiếng đệm"],["Chen ngang"],["Không rõ"]]},
+      {id:"c2",title:"Câu cuối cùng có trọn nghĩa không?",opts:[["Trọn nghĩa"],["Bỏ lửng"],["Không rõ"]]},
+      {id:"c3",title:"Người kia có nên trả lời ngay lúc này không?",opts:[["Có"],["Chưa nên"],["Không rõ"]]},
+      {id:"c4",title:"Sau đoạn này, ai sẽ là người nói tiếp?",opts:[["Người đang nói tiếp tục nói"],["Người kia sẽ nói"],["Không rõ"]]}
     ]},
-    {id:"bc",name:"Tiếng đệm",intro:"Người nghe có chêm tiếng ngắn để báo là đang nghe không?",qs:[
-      {id:"b1",title:"Có ai chêm tiếng đệm (ừ, dạ, vâng…) không?",opts:[["Có"],["Không"],["Không rõ"]]},
-      {id:"b2",title:"Tiếng đệm đó là tiếng nào?",opts:[["Ừ, ừm"],["Dạ, vâng"],["À, ờ"],["Tiếng khác"],["Không có"]]},
-      {id:"b3",title:"Tiếng đệm dài hay ngắn?",opts:[["Rất ngắn, 1 tiếng"],["Hơi dài, từ 2 tiếng"],["Không có"]]},
-      {id:"b4",title:"Sau tiếng đệm, người nói chính làm gì?",opts:[["Nói tiếp bình thường"],["Dừng lại"],["Không có tiếng đệm"]]}
+    {id:"tvoice",name:"Sắc thái giọng",intro:"Chọn theo giọng của người nói ở cuối đoạn.",qs:[
+      {id:"v1",title:"Giọng ở cuối câu thế nào?",opts:[["Hạ xuống"],["Giữ nguyên, lơ lửng"],["Lên cao như câu hỏi"]]},
+      {id:"v2",title:"Cảm xúc của câu nói là gì?",opts:[["Vui"],["Buồn"],["Bình thường"],["Tức giận"]]},
+      {id:"v3",title:"Âm lượng giọng nói thế nào?",opts:[["Nhỏ"],["Vừa"],["To"]]},
+      {id:"v4",title:"Tốc độ nói thế nào?",opts:[["Chậm"],["Vừa"],["Nhanh"]]}
     ]},
-    {id:"int",name:"Chen ngang",intro:"Có ai giành lời khi người kia chưa nói xong không?",qs:[
-      {id:"i1",title:"Có ai nói đè hoặc giành lời không?",opts:[["Có"],["Không"],["Không rõ"]]},
-      {id:"i2",title:"Người chen vào nói nhiều hay ít?",opts:[["Cả một câu hoặc một ý"],["Chỉ vài tiếng"],["Không có người chen vào"]]},
-      {id:"i3",title:"Người đang nói có bị cắt ngang không?",opts:[["Có, phải dừng lại"],["Có, nhưng vẫn nói tiếp"],["Không"]]},
-      {id:"i4",title:"Hai giọng có đè lên nhau không?",opts:[["Đè lên nhau rõ"],["Đè lên một chút"],["Không đè"]]}
+    {id:"tenv",name:"Âm thanh môi trường",intro:"Chú ý những gì xảy ra ngoài lời của người nói chính.",qs:[
+      {id:"e1",title:"Ở cuối đoạn, có mấy người đang nói?",opts:[["Một người"],["Hai người nói cùng lúc"],["Không ai nói"]]},
+      {id:"e2",title:"Có ai chêm tiếng đệm (ừ, dạ, vâng…) không?",opts:[["Có"],["Không"],["Không rõ"]]},
+      {id:"e3",title:"Khoảng lặng ở cuối đoạn dài bao lâu?",opts:[["Không có"],["Dưới 1 giây"],["Hơn 1 giây"]]},
+      {id:"e4",title:"Tiếng nền hoặc chất lượng âm thanh có làm khó nghe không?",opts:[["Nghe rõ"],["Hơi khó nghe"],["Không nghe ra"]]}
     ]}
   ],
   slm:[
