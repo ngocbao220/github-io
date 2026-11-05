@@ -12,12 +12,15 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
+:root{--rw:380px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55}
 header{padding:14px 20px;border-bottom:1px solid var(--line);font-weight:600;font-size:18px}
-.app{display:grid;grid-template-columns:260px minmax(0,1fr) 380px;min-height:calc(100% - 53px)}
-.col{padding:20px;min-width:0}
+.app{position:relative;display:grid;grid-template-columns:240px minmax(0,1fr) var(--rw);height:calc(100% - 53px)}
+.col{padding:20px;min-width:0;overflow-y:auto}
 .left{border-right:1px solid var(--line)}
 .right{border-left:1px solid var(--line);background:#fafafa}
+.grip{position:absolute;right:calc(var(--rw) - 4px);top:0;bottom:0;width:8px;cursor:col-resize;z-index:2;touch-action:none}
+.grip:hover,.grip.on,.grip:focus-visible{background:var(--accent-soft);outline:0;box-shadow:inset 2px 0 0 var(--accent)}
 h2{font-size:14px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
 h3{font-size:17px;margin:20px 0 6px}
 h3:first-of-type{margin-top:0}
@@ -48,9 +51,10 @@ canvas{display:block;width:100%;height:72px;cursor:pointer}
 .doc li{margin-bottom:4px}
 .doc .tag{font-weight:600}
 .doc hr{border:0;border-top:1px solid var(--line);margin:16px 0}
-@media (max-width:1100px){.app{grid-template-columns:220px minmax(0,1fr) 320px}}
 @media (max-width:860px){
-  .app{grid-template-columns:1fr}
+  .app{grid-template-columns:1fr;height:auto}
+  .col{overflow:visible}
+  .grip{display:none}
   .mid{order:1}.left{order:2;border-right:0;border-top:1px solid var(--line)}.right{order:3;border-left:0;border-top:1px solid var(--line)}
 }
 </style>
@@ -86,7 +90,7 @@ canvas{display:block;width:100%;height:72px;cursor:pointer}
     <p class="note">Đây là bản thử. Lựa chọn của bạn chỉ hiện trên trang này và chưa được gửi đi.</p>
   </main>
 
-  <aside class="col right doc" aria-label="Tài liệu hướng dẫn">
+  <aside class="col right doc" id="doc" aria-label="Tài liệu hướng dẫn">
     <h2>Hướng dẫn</h2>
     <h3>Việc cần làm</h3>
     <ul>
@@ -120,6 +124,7 @@ canvas{display:block;width:100%;height:72px;cursor:pointer}
     <h3>Câu 3. Kiểu trò chuyện</h3>
     <p><b>Kể chuyện:</b> một người kể, người kia nghe. <b>Phỏng vấn:</b> một người hỏi, một người trả lời. <b>Chia sẻ:</b> nói về cảm nghĩ, kinh nghiệm của mình. <b>Trò chuyện thường:</b> hai bên nói qua lại tự nhiên.</p>
   </aside>
+  <div class="grip" id="grip" role="separator" aria-orientation="vertical" aria-label="Kéo để đổi độ rộng phần hướng dẫn" tabindex="0"></div>
 </div>
 
 <script>
@@ -157,6 +162,7 @@ function draw(){
   }
 }
 function updTime(){timeEl.textContent=fmt(audio.currentTime)+" / "+fmt(audio.duration);}
+function resetAnswers(){document.querySelectorAll('.opts input').forEach(function(i){i.checked=false;});}
 function load(s){
   if(audio){audio.pause();}
   cur=s;audio=new Audio(s.src);
@@ -188,10 +194,27 @@ var box=document.getElementById("samples");
 SAMPLES.forEach(function(s){
   var b=document.createElement("button");b.type="button";b.className="sample";b.dataset.n=s.n;b.setAttribute("aria-pressed","false");
   b.innerHTML="<b>Ví dụ "+s.n+"</b><span>"+s.label+"</span>";
-  b.addEventListener("click",function(){load(s);toggle();});
+  b.addEventListener("click",function(){load(s);resetAnswers();});
   box.appendChild(b);
 });
 load(SAMPLES[0]);
+
+// Đổi độ rộng phần hướng dẫn
+(function(){
+  var grip=document.getElementById("grip"),root=document.documentElement,MIN=260,MAX=720;
+  function set(w){w=Math.min(MAX,Math.max(MIN,Math.round(w)));root.style.setProperty("--rw",w+"px");try{localStorage.setItem("rw",w);}catch(e){}return w;}
+  try{var s=parseInt(localStorage.getItem("rw"),10);if(s)set(s);}catch(e){}
+  var drag=false;
+  grip.addEventListener("pointerdown",function(e){drag=true;grip.classList.add("on");try{grip.setPointerCapture(e.pointerId);}catch(x){}e.preventDefault();});
+  grip.addEventListener("pointermove",function(e){if(drag)set(window.innerWidth-e.clientX);});
+  function end(){drag=false;grip.classList.remove("on");}
+  grip.addEventListener("pointerup",end);grip.addEventListener("pointercancel",end);
+  grip.addEventListener("keydown",function(e){
+    var w=document.getElementById("doc").getBoundingClientRect().width;
+    if(e.key==="ArrowLeft"){set(w+30);e.preventDefault();}
+    if(e.key==="ArrowRight"){set(w-30);e.preventDefault();}
+  });
+})();
 </script>
 </body>
 </html>
