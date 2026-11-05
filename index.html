@@ -94,6 +94,10 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .exrow:first-child{border-top:0}
 .exrow .dplay{margin-left:0}
 .hide{display:none!important}
+.flt{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.flt button{font:inherit;font-size:14px;color:#444;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 11px;cursor:pointer}
+.flt button:hover{background:#f5f6f8}
+.flt button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
 @media (max-width:860px){
   .app{grid-template-columns:1fr;height:auto}
   .col{overflow:visible}
@@ -108,6 +112,7 @@ canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <div class="app">
   <aside class="col left" aria-label="Mẫu để nghe">
     <h2>Mẫu để nghe</h2>
+    <div class="flt" id="flt" role="group" aria-label="Lọc theo task"></div>
     <div id="samples"></div>
   </aside>
 
@@ -439,7 +444,7 @@ function draw(){
 function updTime(){timeEl.textContent=fmt(audio.currentTime)+" / "+fmt(audio.duration);}
 function setPlayIcon(playing){pbtn.textContent=playing?"❚❚":"▶";pbtn.setAttribute("aria-label",playing?"Tạm dừng":"Phát");}
 function resetScroll(){var m=document.querySelector(".mid"),d=document.getElementById("doc");if(m)m.scrollTop=0;if(d)d.scrollTop=0;}
-function load(s){
+function load(s){cur=s;
   if(typeof stopDoc==="function")stopDoc();
   if(audio){audio.pause();}
   cur=s;audio=new Audio(s.src);
@@ -489,6 +494,28 @@ SAMPLES.forEach(function(s,ix){
   b.addEventListener("click",function(){load(s);if(window.innerWidth<=860){try{document.getElementById("ptitle").scrollIntoView({block:"start"});}catch(e){}}});
   box.appendChild(b);
 });
+var cur=null;
+(function(){
+  var f=document.getElementById("flt"),cnt={};
+  SAMPLES.forEach(function(s){s.tags.forEach(function(t){cnt[t]=(cnt[t]||0)+1;});});
+  var opts=[["all","Tất cả ("+SAMPLES.length+")"]].concat(Object.keys(cnt).map(function(k){return [k,k+" ("+cnt[k]+")"];}));
+  opts.forEach(function(o,i){
+    var b=document.createElement("button");b.type="button";b.dataset.f=o[0];b.textContent=o[1];b.setAttribute("aria-pressed",i===0?"true":"false");
+    b.addEventListener("click",function(){apply(o[0]);});f.appendChild(b);
+  });
+  function apply(k){
+    f.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.f===k?"true":"false");});
+    var first=null,curOk=false;
+    SAMPLES.forEach(function(s){
+      var ok=k==="all"||s.tags.indexOf(k)>=0;
+      box.querySelector('.sample[data-n="'+s.id+'"]').classList.toggle("hide",!ok);
+      if(ok&&!first)first=s;
+      if(ok&&cur&&cur.id===s.id)curOk=true;
+    });
+    if(!curOk&&first)load(first);
+    box.scrollTop=0;
+  }
+})();
 load(SAMPLES[0]);
 
 /* ---- Bật/tắt tài liệu ---- */
