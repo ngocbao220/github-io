@@ -12,21 +12,49 @@
        "STORY",
        "INTERVIEW",
        "SHARE",
-       "CHAT"
+       "CHAT",
+       "DEBATE",
+       "LECTURE",
+       "SERVICE",
+       "SCENE",
+       "OTHER"
       ],
       "title": "Cuộc trò chuyện thuộc kiểu nào?",
       "opts": [
        [
-        "Kể chuyện"
+        "Kể chuyện",
+        "Một người kể, người kia nghe"
        ],
        [
-        "Phỏng vấn"
+        "Phỏng vấn",
+        "Một người hỏi, một người trả lời"
        ],
        [
-        "Chia sẻ"
+        "Chia sẻ",
+        "Nói về cảm nghĩ, kinh nghiệm của mình"
        ],
        [
-        "Trò chuyện thường"
+        "Trò chuyện thường",
+        "Hai bên nói qua lại tự nhiên"
+       ],
+       [
+        "Tranh luận, cãi nhau",
+        "Hai bên đối đáp gay gắt, hay chen lời"
+       ],
+       [
+        "Thuyết trình, giảng bài",
+        "Một người nói dài, ít người xen vào"
+       ],
+       [
+        "Hỏi đáp, tư vấn, chăm sóc khách hàng",
+        "Một bên hỏi việc, một bên hướng dẫn"
+       ],
+       [
+        "Cảnh phim, kịch",
+        "Lời thoại được dàn dựng"
+       ],
+       [
+        "Kiểu khác"
        ]
       ]
      },
@@ -90,26 +118,6 @@
        ],
        [
         "Rất nhiều"
-       ]
-      ]
-     },
-     {
-      "id": "interrupt_rate",
-      "codes": [
-       "NONE",
-       "SOME",
-       "OFTEN"
-      ],
-      "title": "Hai bên có hay ngắt lời nhau không?",
-      "opts": [
-       [
-        "Không"
-       ],
-       [
-        "Thỉnh thoảng"
-       ],
-       [
-        "Thường xuyên"
        ]
       ]
      }
@@ -186,26 +194,6 @@
        ],
        [
         "Bỏ lửng"
-       ],
-       [
-        "Không rõ"
-       ]
-      ]
-     },
-     {
-      "id": "respond",
-      "codes": [
-       "YES",
-       "NO",
-       "UNK"
-      ],
-      "title": "Bên kia có nên trả lời ngay lúc này không?",
-      "opts": [
-       [
-        "Có"
-       ],
-       [
-        "Chưa nên"
        ],
        [
         "Không rõ"
@@ -439,26 +427,6 @@
        [
         "Thu lại qua loa, trong phòng",
         "Có tiếng vang, giọng bị bẹt"
-       ]
-      ]
-     },
-     {
-      "id": "speakers_end",
-      "codes": [
-       "ONE",
-       "OVERLAP",
-       "NONE"
-      ],
-      "title": "Ở cuối đoạn, có mấy người đang nói?",
-      "opts": [
-       [
-        "Một người"
-       ],
-       [
-        "Hai người nói cùng lúc"
-       ],
-       [
-        "Không ai nói"
        ]
       ]
      }
