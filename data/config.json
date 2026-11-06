@@ -120,6 +120,35 @@
         "Rất nhiều"
        ]
       ]
+     },
+     {
+      "id": "accent",
+      "codes": [
+       "NORTH",
+       "CENTRAL",
+       "SOUTH",
+       "FOREIGN",
+       "UNK"
+      ],
+      "title": "Giọng vùng miền của người dùng",
+      "desc": "Chọn vùng nghe giống nhất.",
+      "opts": [
+       [
+        "Miền Bắc"
+       ],
+       [
+        "Miền Trung"
+       ],
+       [
+        "Miền Nam"
+       ],
+       [
+        "Giọng nước ngoài"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
      }
     ]
    },
@@ -330,6 +359,41 @@
         "Nhanh lên"
        ]
       ]
+     },
+     {
+      "id": "age",
+      "codes": [
+       "CHILD",
+       "TEEN",
+       "YOUNG",
+       "MIDDLE",
+       "OLD",
+       "UNK"
+      ],
+      "title": "Độ tuổi người nói",
+      "desc": "Đoán theo giọng. Nhiều người nói thì chọn người nói chính.",
+      "opts": [
+       [
+        "Trẻ em",
+        "Dưới 13 tuổi"
+       ],
+       [
+        "Thanh thiếu niên",
+        "13 đến 19 tuổi"
+       ],
+       [
+        "20 đến 35 tuổi"
+       ],
+       [
+        "36 đến 55 tuổi"
+       ],
+       [
+        "Trên 55 tuổi"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
      }
     ]
    },
@@ -429,6 +493,45 @@
         "Có tiếng vang, giọng bị bẹt"
        ]
       ]
+     },
+     {
+      "id": "artifacts",
+      "codes": [
+       "NONE",
+       "DISTORT",
+       "CRACKLE",
+       "DROPOUT",
+       "HUM",
+       "OTHER",
+       "UNK"
+      ],
+      "title": "Lỗi âm thanh: có lỗi nào nghe rõ không? (chọn lỗi rõ nhất)",
+      "desc": "Lỗi là tiếng bất thường do thu âm hoặc xử lý, không phải tiếng nền của căn phòng.",
+      "opts": [
+       [
+        "Không có"
+       ],
+       [
+        "Rè, méo tiếng",
+        "Giọng bị vỡ, rách"
+       ],
+       [
+        "Lạo xạo, tiếng click",
+        "Tiếng lách tách, nổ nhỏ"
+       ],
+       [
+        "Bị cắt, mất tiếng từng đoạn"
+       ],
+       [
+        "Ù, vo ve đều"
+       ],
+       [
+        "Lỗi khác"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
      }
     ]
    }
@@ -456,6 +559,105 @@
        [
         "Không",
         "Nền gần như im, chỉ có giọng nói. Tiếng ù rất nhỏ, đều, không nhận ra nguồn thì vẫn tính là B."
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "register",
+      "codes": [
+       "FORMAL",
+       "SEMI",
+       "CASUAL",
+       "SLANG",
+       "UNK"
+      ],
+      "title": "Mức trang trọng: người nói dùng lời lẽ ở mức nào?",
+      "desc": "Xét cách dùng từ và xưng hô, không xét giọng.",
+      "opts": [
+       [
+        "Rất trang trọng",
+        "Từ ngữ chuẩn mực, như văn bản, phát biểu, bản tin"
+       ],
+       [
+        "Trang trọng vừa",
+        "Lịch sự, rõ ràng nhưng mềm hơn, như công việc, phỏng vấn"
+       ],
+       [
+        "Đời thường",
+        "Nói chuyện thường ngày, có từ đệm, nói rút gọn"
+       ],
+       [
+        "Suồng sã",
+        "Tiếng lóng, đùa cợt thân mật, nói tục nhẹ"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "fluency",
+      "codes": [
+       "FLUENT",
+       "SLIGHT",
+       "DISFLUENT",
+       "REPEAT",
+       "UNK"
+      ],
+      "title": "Độ trôi chảy: người nói nói liền mạch đến đâu?",
+      "desc": "Chỉ xét người nói chính.",
+      "opts": [
+       [
+        "Trôi chảy",
+        "Liền mạch, gần như không vấp"
+       ],
+       [
+        "Hơi ngập ngừng",
+        "Thỉnh thoảng có ờ, ừm, dừng ngắn"
+       ],
+       [
+        "Ngắt quãng nhiều",
+        "Hay dừng, ờ ừm liên tục, khó theo"
+       ],
+       [
+        "Lặp từ, nói lại",
+        "Hay lặp một từ hoặc sửa câu giữa chừng"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "speed",
+      "codes": [
+       "SLOW",
+       "NORMAL",
+       "FAST",
+       "VARIABLE",
+       "UNK"
+      ],
+      "title": "Tốc độ nói",
+      "desc": "So với cách người Việt nói chuyện bình thường.",
+      "opts": [
+       [
+        "Chậm",
+        "Ghi chép kịp"
+       ],
+       [
+        "Vừa",
+        "Nghe thoải mái"
+       ],
+       [
+        "Nhanh",
+        "Phải tập trung mới theo kịp"
+       ],
+       [
+        "Thay đổi nhiều",
+        "Lúc nhanh lúc chậm rõ rệt"
        ],
        [
         "Không nghe rõ / không chắc"
@@ -506,6 +708,102 @@
        [
         "distant_mic",
         "Giọng xa, nhỏ, vang, như thu từ giữa phòng."
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "recording_quality",
+      "codes": [
+       "EXCELLENT",
+       "GOOD",
+       "FAIR",
+       "POOR"
+      ],
+      "title": "Chất lượng thu âm tổng thể",
+      "desc": "Xét độ sạch và rõ của âm thanh, không xét nội dung.",
+      "opts": [
+       [
+        "Rất tốt",
+        "Sạch, rõ như phòng thu"
+       ],
+       [
+        "Tốt",
+        "Rõ, có chút tạp âm nhẹ"
+       ],
+       [
+        "Trung bình",
+        "Nghe được nhưng có nhiễu hoặc hơi bẹt"
+       ],
+       [
+        "Kém",
+        "Khó nghe, nhiễu nhiều"
+       ]
+      ]
+     },
+     {
+      "id": "artifacts",
+      "codes": [
+       "NONE",
+       "DISTORT",
+       "CRACKLE",
+       "DROPOUT",
+       "HUM",
+       "OTHER",
+       "UNK"
+      ],
+      "title": "Lỗi âm thanh: có lỗi nào nghe rõ không? (chọn lỗi rõ nhất)",
+      "desc": "Lỗi là tiếng bất thường do thu âm hoặc xử lý, không phải tiếng nền của căn phòng.",
+      "opts": [
+       [
+        "Không có"
+       ],
+       [
+        "Rè, méo tiếng",
+        "Giọng bị vỡ, rách"
+       ],
+       [
+        "Lạo xạo, tiếng click",
+        "Tiếng lách tách, nổ nhỏ"
+       ],
+       [
+        "Bị cắt, mất tiếng từng đoạn"
+       ],
+       [
+        "Ù, vo ve đều"
+       ],
+       [
+        "Lỗi khác"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "reverb",
+      "codes": [
+       "DRY",
+       "LIGHT",
+       "HEAVY",
+       "UNK"
+      ],
+      "title": "Tiếng vang",
+      "desc": "Vang là tiếng dội lại của căn phòng, làm giọng nghe như nói trong phòng trống.",
+      "opts": [
+       [
+        "Không vang",
+        "Giọng sát, khô"
+       ],
+       [
+        "Vang nhẹ",
+        "Như phòng nhỏ, phòng ngủ"
+       ],
+       [
+        "Vang nhiều",
+        "Như sảnh, hội trường, nhà thờ"
        ],
        [
         "Không nghe rõ / không chắc"
@@ -565,6 +863,200 @@
        [
         "Không xác định",
         "Không đủ dấu hiệu để đoán."
+       ]
+      ]
+     },
+     {
+      "id": "pitch",
+      "codes": [
+       "LOW",
+       "MID",
+       "HIGH",
+       "UNK"
+      ],
+      "title": "Cao độ giọng: so với người cùng giới, giọng này cao hay trầm?",
+      "opts": [
+       [
+        "Trầm"
+       ],
+       [
+        "Vừa"
+       ],
+       [
+        "Cao"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "timbre",
+      "codes": [
+       "WARM",
+       "BRIGHT",
+       "HUSKY",
+       "SHRILL",
+       "THIN",
+       "NEUTRAL"
+      ],
+      "title": "Chất giọng nghe thế nào? (chọn nét nổi bật nhất)",
+      "desc": "Đây là câu chủ quan. Không chắc thì chọn Bình thường.",
+      "opts": [
+       [
+        "Trầm ấm",
+        "Dày, êm, dễ nghe"
+       ],
+       [
+        "Sáng, trong",
+        "Nhẹ, rõ, tươi"
+       ],
+       [
+        "Khàn, đục",
+        "Có tiếng gió hoặc tiếng rít trong giọng"
+       ],
+       [
+        "Chói, the thé",
+        "Sắc, nghe hơi nhức tai"
+       ],
+       [
+        "Mỏng, nhẹ",
+        "Ít lực, nhẹ như thì thầm"
+       ],
+       [
+        "Bình thường"
+       ]
+      ]
+     },
+     {
+      "id": "emotion",
+      "codes": [
+       "HAPPY",
+       "SAD",
+       "NEUTRAL",
+       "ANGRY",
+       "ANXIOUS",
+       "SURPRISED",
+       "UNK"
+      ],
+      "title": "Cảm xúc chính của người nói",
+      "desc": "Chọn theo cảm xúc nghe ra từ giọng, không đoán theo nội dung.",
+      "opts": [
+       [
+        "Vui"
+       ],
+       [
+        "Buồn"
+       ],
+       [
+        "Bình thường"
+       ],
+       [
+        "Tức giận"
+       ],
+       [
+        "Lo lắng, sợ"
+       ],
+       [
+        "Ngạc nhiên"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "physical_state",
+      "codes": [
+       "NORMAL",
+       "HOARSE",
+       "BREATHY",
+       "SICK",
+       "TIRED",
+       "UNK"
+      ],
+      "title": "Giọng có dấu hiệu về cơ thể không?",
+      "desc": "Chỉ chọn khi nghe rõ. Không chắc thì chọn Bình thường.",
+      "opts": [
+       [
+        "Bình thường"
+       ],
+       [
+        "Khàn hoặc mất giọng"
+       ],
+       [
+        "Thở gấp, hổn hển"
+       ],
+       [
+        "Nghẹt mũi, như đang ốm"
+       ],
+       [
+        "Mệt, uể oải"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "volume",
+      "codes": [
+       "SOFT",
+       "NORMAL",
+       "LOUD",
+       "VARIABLE"
+      ],
+      "title": "Âm lượng giọng nói",
+      "desc": "Xét độ to của giọng trong file, không xét bạn đang để loa to hay nhỏ.",
+      "opts": [
+       [
+        "Nhỏ",
+        "Phải nghe kỹ"
+       ],
+       [
+        "Vừa"
+       ],
+       [
+        "To",
+        "To, gần như nói lớn"
+       ],
+       [
+        "Thay đổi nhiều"
+       ]
+      ]
+     },
+     {
+      "id": "age",
+      "codes": [
+       "CHILD",
+       "TEEN",
+       "YOUNG",
+       "MIDDLE",
+       "OLD",
+       "UNK"
+      ],
+      "title": "Độ tuổi người nói",
+      "desc": "Đoán theo giọng. Nhiều người nói thì chọn người nói chính.",
+      "opts": [
+       [
+        "Trẻ em",
+        "Dưới 13 tuổi"
+       ],
+       [
+        "Thanh thiếu niên",
+        "13 đến 19 tuổi"
+       ],
+       [
+        "20 đến 35 tuổi"
+       ],
+       [
+        "36 đến 55 tuổi"
+       ],
+       [
+        "Trên 55 tuổi"
+       ],
+       [
+        "Không nghe rõ / không chắc"
        ]
       ]
      }
@@ -694,6 +1186,74 @@
        ],
        [
         "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "sources",
+      "codes": [
+       "NONE",
+       "CROWD",
+       "MUSIC",
+       "MACHINE",
+       "NATURE",
+       "OBJECT",
+       "OTHER",
+       "UNK"
+      ],
+      "title": "Nguồn tiếng nền: tiếng nền nổi bật nhất là gì?",
+      "desc": "Nếu không nghe tiếng nền thì chọn Không có.",
+      "opts": [
+       [
+        "Không có"
+       ],
+       [
+        "Người nói chuyện xung quanh"
+       ],
+       [
+        "Nhạc"
+       ],
+       [
+        "Xe cộ, máy móc, quạt"
+       ],
+       [
+        "Thiên nhiên: gió, mưa, chim"
+       ],
+       [
+        "Tiếng đồ vật: gõ, bước chân, giấy"
+       ],
+       [
+        "Khác"
+       ],
+       [
+        "Không nghe rõ / không chắc"
+       ]
+      ]
+     },
+     {
+      "id": "noise",
+      "codes": [
+       "NONE",
+       "LOW",
+       "MID",
+       "HIGH"
+      ],
+      "title": "Tiếng ồn nền mạnh đến đâu?",
+      "opts": [
+       [
+        "Không có"
+       ],
+       [
+        "Nhẹ",
+        "Nghe được nếu để ý, không ảnh hưởng"
+       ],
+       [
+        "Vừa",
+        "Nghe rõ, hơi vướng"
+       ],
+       [
+        "Mạnh",
+        "Át lời, khó nghe"
        ]
       ]
      }
