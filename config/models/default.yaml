@@ -1,0 +1,32 @@
+# Đường dẫn mô hình. Chép thành local.yaml, sửa đường dẫn, rồi chạy với models=local.
+vad:
+  onnx: false
+  min_silence_ms: 100
+diarization:              # Nemotron-Diarization (NeMo)
+  path: /models/nemotron-diarization/model.nemo
+  device: cuda
+asr:                      # zipformer qua sherpa-onnx
+  encoder: /models/zipformer-vi/encoder.onnx
+  decoder: /models/zipformer-vi/decoder.onnx
+  joiner: /models/zipformer-vi/joiner.onnx
+  tokens: /models/zipformer-vi/tokens.txt
+  provider: cuda
+  threads: 4
+qwen_instruct:            # chạy bằng: vllm serve <path> --served-model-name <served_name> --port 8001
+  path: /models/Qwen3-Omni-30B-A3B-Instruct
+  base_url: http://127.0.0.1:8001/v1
+  served_name: qwen3-omni-instruct
+  temperature: 0
+  max_tokens: 1024
+  json_schema: true
+qwen_thinking:
+  path: /models/Qwen3-Omni-30B-A3B-Thinking
+  base_url: http://127.0.0.1:8002/v1
+  served_name: qwen3-omni-thinking
+  temperature: 0
+  max_tokens: 8192
+  json_schema: false      # ép schema có thể cắt phần suy nghĩ; parse JSON cuối thay vào đó
+nemotron_transcribe:      # ASR đối chiếu: chưa có code nào gọi, chỉ in được lệnh serve
+  path: /models/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B
+  base_url: http://127.0.0.1:8003/v1
+  served_name: nemotron-transcribe

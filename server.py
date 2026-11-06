@@ -9,9 +9,10 @@ API:
   GET    /api/config  -> {"config": {...}|null, "editable": true|false}
   PUT    /api/config  -> lưu cấu hình (cần header X-Token nếu có EDIT_TOKEN)
   DELETE /api/config  -> xoá cấu hình đã lưu, quay về mặc định trong index.html
+  GET    /api/samples -> các segment trong manifests/*.jsonl có clip tồn tại (trang dùng thay danh sách mẫu cứng)
 Cấu hình lưu ở data/config.json (bản cũ giữ ở data/config.json.bak).
 """
-import hmac, json, os, tempfile
+import glob, hmac, json, os, tempfile
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -78,8 +79,15 @@ class H(SimpleHTTPRequestHandler):
                 with open(CFG, encoding="utf8") as f:
                     cfg = json.load(f)
             return self.send_json(200, {"config": cfg, "editable": True, "needs_token": bool(TOKEN)})
-        # chỉ phục vụ trang và thư mục audio, không lộ server.py hay data/
-        if path in PUBLIC or path.startswith("/audio/"):
+        if path == "/api/samples":
+            rows = []
+            for p in sorted(glob.glob(os.path.join(ROOT, "manifests", "*.jsonl"))):
+                with open(p, encoding="utf8") as f:
+                    rows += [json.loads(l) for l in f if l.strip()]
+            rows = [r for r in rows if r.get("audio") and os.path.exists(os.path.join(ROOT, r["audio"]))]
+            return self.send_json(200, {"samples": rows})
+        # chỉ phục vụ trang, audio ví dụ và clip segment; không lộ server.py hay data/
+        if path in PUBLIC or path.startswith("/audio/") or path.startswith("/clips/"):
             return super().do_GET()
         self.send_error(404)
 

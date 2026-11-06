@@ -1,0 +1,14 @@
+# Chỉ cần trên server chạy pipeline. Trang gán nhãn, server.py và audit_questions.py chỉ dùng stdlib;
+# các tool còn lại trong tools/ cần hydra-core để đọc config/.
+hydra-core          # đọc config/
+silero-vad          # segment.py: VAD
+nemo_toolkit[asr]   # segment.py: Nemotron-Diarization (Sortformer)
+sherpa-onnx         # segment.py: zipformer ASR
+soundfile
+numpy
+scipy               # augment.py: giả vang
+vllm                # phục vụ Qwen3-Omni (chạy riêng: vllm serve <path> ...)
+pandas              # notebook
+matplotlib          # notebook
+ipywidgets          # notebook, bộ lọc tương tác (tuỳ chọn)
+# ngoài pip: ffmpeg

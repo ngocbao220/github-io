@@ -1,0 +1,26 @@
+# Config chính (Hydra). Chọn nhóm khác hoặc ghi đè từng khoá trên dòng lệnh, ví dụ:
+#   python3 tools/collect.py models=local collect=local collect.buckets.0.target_minutes=60
+#   python3 tools/ask_models.py --manifest 'manifests/*.jsonl' --model qwen_instruct --out out/a.jsonl models=local
+# File local.yaml trong mỗi nhóm là cấu hình riêng của từng máy, không commit (xem .gitignore).
+defaults:
+  - models: default
+  - collect: default
+  - segment: default
+  - manifest: default
+  - quotas: default
+  - _self_
+
+# Thư mục dùng chung cho mọi tool, tương đối so với gốc repo (hoặc đường dẫn tuyệt đối).
+paths:
+  raw: data/raw           # wav đã chuẩn hoá, transcript, raw_index.jsonl, classified.jsonl
+  clips: clips            # clip của từng segment
+  manifests: manifests    # manifests/<id>.jsonl
+  answers: out            # câu trả lời của mô hình, thống kê
+
+dry_run: false          # collect.py: chỉ liệt kê file nguồn và quota còn thiếu
+
+hydra:
+  run:
+    dir: out/hydra/${now:%Y-%m-%d_%H-%M-%S}
+  job:
+    chdir: false

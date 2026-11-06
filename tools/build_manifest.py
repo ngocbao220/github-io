@@ -4,12 +4,14 @@
 Đầu vào (cùng tên gốc, ví dụ 10154_2):
   10154_2.wav, 10154_2_transcript.txt  ("bắt đầu<TAB>kết thúc<TAB>SPEAKER_xx: lời")
   10154_2_turnevent.txt                ("bắt đầu<TAB>kết thúc<TAB>EoT|MoT|FI|BC|INT")
-Chạy:  python3 build_manifest.py 10154_2 [--dir .] [--pre 12] [--post 3] [--clips out_dir]
+Chạy:  python3 tools/build_manifest.py 10154_2 [--dir .] [--clips] [manifest.pre=12 manifest.post=3]
+(cửa sổ clip ở config/manifest, thư mục clip ở paths.clips; Hydra)
 Mỗi sự kiện là một mẫu: người dùng là người phát sinh sự kiện (đảo vai tự nhiên theo từng sự kiện).
 Các trường có đuôi _auto lấy tự động, người gán nhãn chỉ kiểm tra.
 """
 import argparse, json, os, re, subprocess, sys
 
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAP = {"EoT": "EOT", "MoT": "MOT", "FI": "MOT", "BC": "BC", "INT": "INT"}
 
 
@@ -53,17 +55,10 @@ def owner(ev, tr):
     return prev[-1] if prev else None
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("name")
-    ap.add_argument("--dir", default=".")
-    ap.add_argument("--pre", type=float, default=12.0, help="giây ngữ cảnh trước sự kiện")
-    ap.add_argument("--post", type=float, default=3.0, help="giây giữ lại sau sự kiện")
-    ap.add_argument("--clips", help="thư mục xuất clip wav (cần ffmpeg)")
-    a = ap.parse_args()
-    d = a.dir
-    tr = load_tr(os.path.join(d, a.name + "_transcript.txt"))
-    evs = load_ev(os.path.join(d, a.name + "_turnevent.txt"))
+def build(name, d, pre, post, clips=None, extra=None):
+    """Trả về danh sách mẫu (dict) cho một file. extra: các trường ghi thêm vào mọi mẫu (bucket, file_labels...)."""
+    tr = load_tr(os.path.join(d, name + "_transcript.txt"))
+    evs = load_ev(os.path.join(d, name + "_turnevent.txt"))
     dur = max(t["e"] for t in tr)
     rows = []
     for i, ev in enumerate(evs):
@@ -83,23 +78,50 @@ def main():
             nxt_spk = "SAME" if nxt["spk"] == user else "OTHER"
         ovl = any(t["spk"] != user and t["s"] < end and t["e"] > s for t in tr)
         gap = round(nxt["s"] - end, 2) if nxt and nxt["s"] >= end else 0.0
-        t0 = max(0.0, s - a.pre)
-        t1 = min(dur, end + a.post)
-        rows.append({
-            "conversation_id": a.name, "event_id": f"{a.name}_{i:03d}",
-            "user": user, "event_auto": MAP[c], "event_raw": c,
+        t0 = max(0.0, s - pre)
+        t1 = min(dur, end + post)
+        # mốc để đo latency, tính theo giây trong clip
+        r3 = lambda x: round(x - t0, 3)
+        ev_code = MAP[c]
+        if ev_code == "EOT":
+            times = {"t_end": r3(end)}
+        elif ev_code == "MOT":
+            pe = next((t["s"] for t in tr if t["spk"] == user and t["s"] >= end - 0.02 and t is not seg), None)
+            times = {"t_pause_start": r3(end), "t_pause_end": r3(pe) if pe is not None else None}
+        elif ev_code == "BC":
+            times = {"t_bc_start": r3(s), "t_bc_end": r3(seg["e"])}
+        else:
+            times = {"t_int_start": r3(s)}
+        row = {
+            "conversation_id": name, "event_id": f"{name}_{i:03d}",
+            "user": user, "event_auto": ev_code, "event_raw": c,
             "t_event_start": round(s, 3), "t_event_end": round(end, 3),
-            "clip": [round(t0, 3), round(t1, 3)],
+            "clip": [round(t0, 3), round(t1, 3)], "times": times,
             "marks_auto": {"turn_end_sec": round(end - t0, 3)},
             "user_text": seg["text"],
             "next_auto": nxt_spk, "overlap_auto": ovl, "gap_after_sec_auto": gap,
-        })
-        if a.clips:
-            os.makedirs(a.clips, exist_ok=True)
+        }
+        row.update(extra or {})
+        if clips:
+            os.makedirs(clips, exist_ok=True)
+            out = os.path.join(clips, row["event_id"] + ".wav")
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(t0), "-to", str(t1),
-                            "-i", os.path.join(d, a.name + ".wav"), "-ac", "1", "-ar", "16000",
-                            os.path.join(a.clips, rows[-1]["event_id"] + ".wav")], check=True)
-    for r in rows:
+                            "-i", os.path.join(d, name + ".wav"), "-ac", "1", "-ar", "16000", out], check=True)
+            row["audio"] = os.path.relpath(out, ROOT)
+        rows.append(row)
+    return rows
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("name")
+    ap.add_argument("--dir", default=".")
+    ap.add_argument("--clips", action="store_true", help="cắt clip wav vào paths.clips (cần ffmpeg)")
+    import conf
+    argv, overrides = conf.split_argv()
+    a = ap.parse_args(argv)
+    C = conf.load(overrides)
+    for r in build(a.name, a.dir, clips=conf.path(C, "clips") if a.clips else None, **C["manifest"]):
         print(json.dumps(r, ensure_ascii=False))
 
 

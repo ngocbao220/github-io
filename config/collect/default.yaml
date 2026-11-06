@@ -1,0 +1,21 @@
+# Thu audio theo quota (chỉ collect.py dùng). Thư mục đầu ra ở `paths`, tham số cắt segment ở nhóm segment/ và manifest/.
+# Chép thành local.yaml, sửa sources và target_minutes, rồi chạy với collect=local.
+sources: [/data/youtube/, /data/film/, /data/cskh/]
+max_minutes_per_file: 10
+min_speech_minutes: 0.5
+seed: 0
+classifier: qwen_instruct   # khoá trong models
+classify:                   # phân loại mức file
+  n_excerpts: 3             # số đoạn trích gửi cho mô hình
+  excerpt_sec: 20.0
+  transcript_chars: 3000    # độ dài transcript rút gọn gửi kèm
+# match dùng đúng codes của câu hỏi (genre, channel, noise_type, distance, accent) + speakers (đếm từ diarization)
+buckets:
+  - {name: chat_2p,   desc: trò chuyện 2 người tự nhiên,    match: {genre: [CHAT, SHARE], speakers: 2}, target_minutes: 30}
+  - {name: interview, desc: phỏng vấn,                      match: {genre: [INTERVIEW]}, target_minutes: 30}
+  - {name: debate,    desc: tranh luận,                     match: {genre: [DEBATE]},    target_minutes: 30}
+  - {name: film,      desc: cảnh hội thoại phim,            match: {genre: [SCENE]},     target_minutes: 30}
+  - {name: service,   desc: chăm sóc khách hàng,            match: {genre: [SERVICE]},   target_minutes: 30}
+  - {name: phone,     desc: qua điện thoại (bất kỳ domain), match: {channel: [PHONE]},   target_minutes: 30}
+  - {name: noisy,     desc: nền ồn (bất kỳ domain),         match: {noise_type: [CROWD, MUSIC, MACHINE]}, target_minutes: 30}
+  - {name: far,       desc: mic xa (bất kỳ domain),         match: {distance: [FAR]},    target_minutes: 30}

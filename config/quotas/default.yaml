@@ -1,0 +1,5 @@
+# Chỉ tiêu tối thiểu số segment mỗi ô; stats.py liệt kê ô chưa đạt.
+event: 200
+event x bucket: 50
+event x condition: 30
+event x accent: 30

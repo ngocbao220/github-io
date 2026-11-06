@@ -1,0 +1,3 @@
+# Quy tắc gán sự kiện turn (segment.events). Dùng bởi segment.py và collect.py.
+bc_max: 1.0     # giây; đoạn chêm dài hơn thì không coi là tiếng đệm (BC)
+int_gap: 0.3    # giây; nói ngay sau câu bỏ ngỏ dưới ngưỡng này là chen ngang (INT)
